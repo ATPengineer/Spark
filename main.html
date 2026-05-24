@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spark Academy — VEX Robotics Coaching</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#0F1B2D;--navy2:#162234;--navy3:#1E3050;
+  --blue:#2563EB;--blue-light:#3B82F6;--blue-dim:#EFF6FF;
+  --orange:#F97316;--orange-dim:#FFF7ED;--orange-border:#FED7AA;
+  --bg:#F8FAFC;--white:#FFFFFF;
+  --text:#0F172A;--text2:#475569;--text3:#94A3B8;
+  --green:#10B981;--green-dim:#ECFDF5;
+  --red:#EF4444;--red-dim:#FEF2F2;
+  --border:#E2E8F0;--border2:#CBD5E1;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;}
+code,pre{font-family:'JetBrains Mono',monospace;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:'DM Sans',sans-serif;letter-spacing:.01em;}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-primary:hover{background:var(--blue-light);}
+.btn-orange{background:var(--orange);color:#fff;}
+.btn-orange:hover{background:#ea6c0a;}
+.btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border);}
+.btn-ghost:hover{border-color:var(--border2);background:var(--white);}
+.btn-sm{padding:7px 14px;font-size:13px;}
+.btn-lg{padding:14px 28px;font-size:16px;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.3px;}
+.badge-green{background:var(--green-dim);color:#065F46;}
+.badge-blue{background:var(--blue-dim);color:var(--blue);}
+.badge-orange{background:var(--orange-dim);color:#9A3412;}
+.badge-red{background:var(--red-dim);color:#991B1B;}
+.badge-gray{background:#F1F5F9;color:#475569;}
+.badge-navy{background:rgba(15,27,45,.08);color:var(--navy);}
+input,select,textarea{border:1.5px solid var(--border);border-radius:8px;padding:9px 13px;font-size:14px;width:100%;outline:none;transition:border .15s;font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+label{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.3px;text-transform:uppercase;display:block;margin-bottom:5px;}
+.sidebar-link{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;color:var(--text3);border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
+.sidebar-link:hover{background:rgba(255,255,255,.06);color:#fff;}
+.sidebar-link.active{background:rgba(37,99,235,.18);color:var(--blue-light);}
+.progress-bar{background:var(--border);border-radius:4px;height:6px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:4px;transition:width .4s;}
+.nav-link{font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:color .15s;text-decoration:none;}
+.nav-link:hover{color:var(--text);}
+.faq-item{border-bottom:1px solid var(--border);padding:20px 0;}
+.faq-q{font-size:16px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'Bricolage Grotesque',sans-serif;}
+.faq-a{font-size:14px;color:var(--text2);line-height:1.7;margin-top:12px;}
+.session-state-locked{opacity:.5;pointer-events:none;}
+.tab{padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:none;background:none;font-family:'DM Sans',sans-serif;color:var(--text2);}
+.tab:hover{color:var(--text);background:#F1F5F9;}
+.tab.active{background:var(--white);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.skill-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;background:var(--blue-dim);color:var(--blue);border:1px solid rgba(37,99,235,.2);}
+.skill-badge.earned{background:var(--green-dim);color:#065F46;border-color:rgba(16,185,129,.2);}
+.pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+.shimmer{background:linear-gradient(90deg,#F1F5F9 25%,#E2E8F0 50%,#F1F5F9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.stat-big{font-family:'Bricolage Grotesque',sans-serif;font-size:40px;font-weight:800;line-height:1;}
+.module-tab{padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:all .15s;font-family:'DM Sans',sans-serif;}
+.module-tab.active{background:var(--blue);color:#fff;}
+.session-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all .15s;}
+.session-row:hover{border-color:var(--blue-light);box-shadow:0 2px 8px rgba(37,99,235,.08);}
+.session-row.complete{border-color:var(--green);}
+.session-row.locked{opacity:.45;cursor:not-allowed;}
+.form-grid{display:grid;gap:16px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:640px){.form-row{grid-template-columns:1fr;}}
+.alert{padding:12px 16px;border-radius:8px;font-size:13px;display:flex;gap:10px;align-items:flex-start;}
+.alert-orange{background:var(--orange-dim);border:1px solid var(--orange-border);color:#9A3412;}
+.alert-blue{background:var(--blue-dim);border:1px solid rgba(37,99,235,.2);color:var(--blue);}
+.alert-green{background:var(--green-dim);border:1px solid rgba(16,185,129,.2);color:#065F46;}
+.hero-gradient{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,#0D2847 100%);}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);}
+.public-nav{position:sticky;top:0;z-index:100;background:rgba(15,27,45,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06);}
+.feature-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.coach-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:28px;transition:all .2s;}
+.coach-card:hover{border-color:var(--blue-light);box-shadow:0 8px 24px rgba(37,99,235,.1);}
+.pricing-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:32px;transition:all .2s;}
+.pricing-card.featured{border-color:var(--blue);box-shadow:0 8px 32px rgba(37,99,235,.15);}
+.pkg-check{color:var(--green);font-size:14px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef}=React;
+
+// ── MOCK DATA ─────────────────────────────────────────────────────────────────
+const STUDENTS=[
+  {id:'alex',name:'Alex Chen',email:'alex@email.com',grade:9,age:14,phone:'555-0101',track:'VEXcode C++',module:2,session:4,totalSessions:28,hoursCoached:42,status:'on-track',competition:'Nov 8, 2026',githubUrl:'https://github.com/alexchen-vex',githubCommits:47,notebookPages:31,skillsEarned:['Override Game Rules','Kit Identification','VS Code Setup','Drivetrain Assembly','Motor Control','Sensor Reading'],competitionRecord:[{name:'Houston Regional',date:'Oct 18, 2026',placement:'12th / 34'}]},
+  {id:'sam',name:'Sam Rivera',email:'sam@email.com',grade:10,age:15,phone:'555-0102',track:'PROS+LemLib',module:3,session:2,totalSessions:22,hoursCoached:33,status:'ahead',competition:'Nov 22, 2026',githubUrl:'https://github.com/samrivera-vex',githubCommits:91,notebookPages:44,skillsEarned:['Override Game Rules','Kit Identification','VS Code Setup','Drivetrain Assembly','Motor Control','Sensor Reading','Gear Ratios','Competition Drivetrain'],competitionRecord:[{name:'Houston Regional',date:'Oct 18, 2026',placement:'5th / 34'},{name:'Dallas Qualifier',date:'Nov 1, 2026',placement:'2nd / 28'}]},
+  {id:'jordan',name:'Jordan Lee',email:'jordan@email.com',grade:8,age:13,phone:'555-0103',track:'VEXcode C++',module:1,session:6,totalSessions:8,hoursCoached:12,status:'on-track',competition:null,githubUrl:'',githubCommits:12,notebookPages:8,skillsEarned:['Override Game Rules','Kit Identification','VS Code Setup','Drivetrain Assembly'],competitionRecord:[]},
+];
+
+const SESSIONS_HISTORY=[
+  {id:1,studentId:'alex',date:'Nov 3, 2026',topic:'path.jerryio.com + Override Autonomous Planning',module:2,sessionNum:4,duration:90,exitMet:true,parentSummary:'Alex completed a full autonomous path in path.jerryio.com targeting the Autonomous Win Point — 7 Pins, 3 Goals. He drew the path confidently and understood the 12-second planning constraint. The spatial reasoning clicked well today. Practice: finalize waypoints and export for VEXcode before next session.',coachNotes:'Strong session. Alex asked great questions about the 12-second buffer — "why not use all 15?" That showed real match awareness. One thing to watch: he tends to place waypoints too close to field perimeter. Reminded him of the autonomous line rule.',challenge:'Finalize your path.jerryio.com plan, export the VEXcode output, and screenshot the full path for your notebook entry.'},
+  {id:2,studentId:'alex',date:'Oct 27, 2026',topic:'Gear Ratios + Override Drivetrain Planning',module:2,sessionNum:3,duration:90,exitMet:true,parentSummary:"Alex calculated effective wheel RPM for three different configurations and selected his competition drivetrain spec: 450 RPM with 4\" omni wheels. He understood the torque/speed tradeoff and justified his choice with Override-specific reasons. He can now calculate RPM from any cartridge + gear ratio combination.",coachNotes:'Good retention from drivetrain build. Alex is strong on the math side.',challenge:'Calculate: what would your effective RPM be if you switched to a 36-tooth driving gear instead of 48? Show your work.'},
+  {id:3,studentId:'sam',date:'Nov 4, 2026',topic:'path.jerryio.com + Override Autonomous Planning',module:3,sessionNum:2,duration:90,exitMet:true,parentSummary:"Sam is on the PROS+LemLib track and advancing quickly. Today he drew a complete Override autonomous path in path.jerryio.com targeting the Autonomous Win Point and exported it in LemLib path format. He understood why 12 seconds — not 15 — is the design target. Strong spatial awareness of the field.",coachNotes:'Sam is the strongest student on my roster right now. Ahead of pace. May introduce multi-path autonomous early.',challenge:'Export your LemLib path and begin the moveToPose command structure in VS Code. Just the function skeleton — no movement yet.'},
+];
+
+const PARTS_REQUESTS=[
+  {id:1,studentId:'alex',part:'VEX Smart Motor (11W)',qty:2,reason:'Two drivetrain motors showing overheating after 45 seconds — likely stalling from friction in wheel assembly',urgency:'high',status:'approved',date:'Oct 30, 2026',cost:79.99},
+  {id:2,studentId:'sam',part:'LemLib-compatible IMU',qty:1,reason:'Need second IMU for redundancy in competition autonomous',urgency:'medium',status:'pending',date:'Nov 2, 2026',cost:34.99},
+];
+
+const CHALLENGES=[
+  {id:1,sessionId:1,studentId:'alex',text:'Finalize your path.jerryio.com plan, export the VEXcode output, and screenshot the full path for your notebook entry.',status:'complete'},
+  {id:2,sessionId:2,studentId:'alex',text:'Calculate: what would your effective RPM be if you switched to a 36-tooth driving gear instead of 48? Show your work.',status:'complete'},
+  {id:3,studentId:'sam',text:'Export your LemLib path and begin the moveToPose command structure in VS Code. Just the function skeleton — no movement yet.',status:'in-progress'},
+];
+
+const PACKAGES=[
+  {name:'Foundation Pack',sessions:8,price:520,perSession:65,popular:false,includes:['Module 1 complete','Drivetrain build','Basic driver control','Parent summaries after each session','Practice challenges']},
+  {name:'Competition Ready',sessions:20,price:1100,perSession:55,popular:true,includes:['Modules 1–4','Competition robot built','Override autonomous coded','GitHub repository','Engineering notebook','Mock match session','Skills assessment report']},
+  {name:'Season Full',sessions:30,price:1500,perSession:50,popular:false,includes:['All 7 modules','State/Worlds prep','Onshape CAD intro','Portfolio + GitHub final review','Priority scheduling','Post-competition iteration']},
+];
+
+const MODULES=[
+  {num:1,name:'Foundations',sessions:8,desc:'Game rules, kit, VS Code, drivetrain build, motor control, sensors, and loops — with the robot built before code is introduced.'},
+  {num:2,name:'Building for Competition',sessions:6,desc:'Override strategy, gear ratios, competition drivetrain, and mechanism design and build for Pin/Cup stacking.'},
+  {num:3,name:'Programming for Competition',sessions:8,desc:'C++ deep dive, path planning, first autonomous, sensor-based movements, GitHub, and full match simulation.'},
+  {num:4,name:'Advanced Competition Skills',sessions:6,desc:'Override Toggle strategy, multi-path autonomous, skills run, driver drills, scouting, and mock match.'},
+  {num:5,name:'Engineering Documentation',sessions:3,desc:'Notebook standards, technical diagrams, and judge interview preparation.'},
+  {num:6,name:'Post-Competition Iteration',sessions:4,desc:'Post-comp debrief, mechanical and code iteration, and second robot design — runs after each competition.'},
+  {num:7,name:'Advanced Skills',sessions:6,desc:'Onshape CAD, State/Worlds prep, robot hardening, and portfolio review. Optional for high-achieving students.'},
+];
+
+const MODULE1_SESSIONS=[
+  {num:'1-1',title:'VEX Override — The Game',format:'Discussion + Online',duration:'75 min',status:'complete',exitStd:'Student can explain all three scoring actions (5/10/8 pts) and what controls each'},
+  {num:'1-2',title:'Meet the Kit + Component Identification',format:'Hands-on',duration:'90 min',status:'complete',exitStd:'Student can name and describe the function of every major component'},
+  {num:'1-3',title:'VS Code Setup + Project Structure',format:'Online + Hands-on',duration:'75 min',status:'complete',exitStd:'Student has a working VS Code project and can identify the purpose of each file'},
+  {num:'1-4',title:'Your First Drivetrain — Assembly',format:'Hands-on',duration:'90 min',status:'complete',exitStd:'Drivetrain frame passes shake test, all shaft collars tight, passes coach inspection'},
+  {num:'1-5',title:'Motor Control + Motor Groups',format:'Online + Hands-on',duration:'90 min',status:'complete',exitStd:'Student can write a complete motor control sequence from scratch without reference'},
+  {num:'1-6',title:'Sensors — IMU, Distance, Optical',format:'Online + Hands-on',duration:'90 min',status:'upcoming',exitStd:'Student can read any sensor value and explain what it represents physically'},
+  {num:'1-7',title:'If/Else, While, For Loops',format:'Online + Hands-on',duration:'90 min',status:'locked',exitStd:'Student can write all three control structures correctly from memory'},
+  {num:'1-8',title:'Your First Drivetrain — Drive + Evaluate',format:'Hands-on',duration:'90 min',status:'locked',exitStd:'Student can drive the robot through the challenge course and identify 3 improvement areas'},
+];
+
+const ALL_SKILLS=['Override Game Rules','Kit Identification','VS Code Setup','Drivetrain Assembly','Motor Control','Sensor Reading','Gear Ratios','Competition Drivetrain','Mechanism Design','GitHub Branching','Sensor-Based Autonomous','PID Tuning','Multi-Path Autonomous','Skills Run','Driver Drills','Scouting System','Notebook Standards','CAD Basics'];
+
+const FAQ_ITEMS=[
+  {q:'Do I need to already have a VEX kit?',a:'No. We can work with kits provided at the session location, or guide you on purchasing one. Many students start without any equipment — we handle everything.'},
+  {q:'What age is this for?',a:'Primarily middle and high school students (grades 6–12). Some advanced middle schoolers are placed at higher entry levels. Age matters less than engagement level.'},
+  {q:'How long until my student is competition-ready?',a:'With the Competition Ready package (20 sessions), most students have a competition-quality robot, coded autonomous, and GitHub portfolio within one full season. Some students reach competition readiness faster depending on prior experience.'},
+  {q:'What\'s the difference between 1-on-1 and small group?',a:'In 1-on-1 sessions, the entire 75–90 minutes is dedicated to your student. In small group (2–4 students), sessions are 90 minutes and students work alongside peers at a similar level. Both options include the same curriculum and parent summaries.'},
+  {q:'Can my student join mid-season?',a:'Yes. Our intake assessment determines exactly where in the curriculum your student belongs — no need to start from the beginning.'},
+  {q:'What if we need to reschedule?',a:'Sessions can be rescheduled with 48 hours notice at no charge. Cancellations within 48 hours are charged as used sessions.'},
+  {q:'Does my student need a competition team?',a:'No. Many of our students are coached individually and compete as independent teams (a valid VEX format). We can also help connect students with others looking to form teams.'},
+  {q:'What do students walk away with at the end?',a:'A GitHub repository with all their code, an engineering notebook, a competition record, a portfolio of skills earned, and a resume-ready credential documenting their season.'},
+];
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+const Avatar=({name,size=36,bg='#2563EB'})=>{
+  const initials=name.split(' ').map(n=>n[0]).join('').slice(0,2);
+  return <div style={{width:size,height:size,borderRadius:'50%',background:bg+'22',border:`2px solid ${bg}33`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:size*.33,fontWeight:700,color:bg,flexShrink:0,fontFamily:"'Bricolage Grotesque',sans-serif"}}>{initials}</div>;
+};
+
+const ProgressRing=({pct,size=52,stroke=5,color='#2563EB'})=>{
+  const r=size/2-stroke;
+  const circ=2*Math.PI*r;
+  const off=circ-(pct/100)*circ;
+  return <svg width={size} height={size} style={{transform:'rotate(-90deg)'}}>
+    <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#E2E8F0" strokeWidth={stroke}/>
+    <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={stroke} strokeDasharray={circ} strokeDashoffset={off} strokeLinecap="round"/>
+  </svg>;
+};
+
+const Countdown=({date})=>{
+  if(!date) return <span style={{color:'var(--text3)'}}>—</span>;
+  const d=new Date(date),now=new Date();
+  const days=Math.max(0,Math.ceil((d-now)/(1000*60*60*24)));
+  return <span style={{color:'var(--orange)',fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800}}>{days}</span>;
+};
+
+const FormatBadge=({fmt})=>{
+  const map={'Online':['🌐','badge-blue'],'Hands-on':['🔧','badge-orange'],'Online + Hands-on':['💻','badge-navy'],'Discussion + Online':['💬','badge-gray']};
+  const [icon,cls]=map[fmt]||['📋','badge-gray'];
+  return <span className={`badge ${cls}`}>{icon} {fmt}</span>;
+};
+
+const StatusBadge=({s})=>{
+  const map={'on-track':['On Track','badge-green'],'ahead':['Ahead','badge-blue'],'behind':['Behind','badge-red'],'complete':['Complete','badge-green'],'pending':['Pending','badge-orange'],'approved':['Approved','badge-green'],'in-progress':['In Progress','badge-blue']};
+  const [label,cls]=map[s]||[s,'badge-gray'];
+  return <span className={`badge ${cls}`}>{label}</span>;
+};
+
+const ModuleProgress=({current,total,color='var(--blue)'})=>{
+  const pct=Math.round((current/total)*100);
+  return <div><div style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:4}}><span style={{color:'var(--text2)'}}>Session {current} of {total}</span><span style={{color:'var(--text2)'}}>{pct}%</span></div><div className="progress-bar"><div className="progress-fill" style={{width:`${pct}%`,background:color}}/></div></div>;
+};
+
+// ── PUBLIC SITE ───────────────────────────────────────────────────────────────
+const PublicHeader=({page,setPage,onLogin})=>(
+  <nav className="public-nav">
+    <div style={{maxWidth:1200,margin:'0 auto',padding:'0 24px',display:'flex',alignItems:'center',justifyContent:'space-between',height:64}}>
+      <div style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer'}} onClick={()=>setPage('home')}>
+        <div style={{width:32,height:32,background:'var(--blue)',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',fontSize:16}}>⚡</div>
+        <span style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:18,color:'#fff',letterSpacing:'-.3px'}}>Spark Academy</span>
+      </div>
+      <div style={{display:'flex',gap:32}}>
+        {['home','curriculum','coaches','pricing'].map(p=>(
+          <span key={p} onClick={()=>setPage(p)} style={{fontSize:14,fontWeight:500,color:page===p?'#fff':'rgba(255,255,255,.55)',cursor:'pointer',transition:'color .15s',textTransform:'capitalize'}}>{p==='home'?'How It Works':p.charAt(0).toUpperCase()+p.slice(1)}</span>
+        ))}
+      </div>
+      <div style={{display:'flex',gap:10}}>
+        <button className="btn btn-ghost btn-sm" style={{color:'rgba(255,255,255,.7)',borderColor:'rgba(255,255,255,.15)'}} onClick={onLogin}>Sign In</button>
+        <button className="btn btn-orange btn-sm" onClick={()=>setPage('book')}>Book a Session</button>
+      </div>
+    </div>
+  </nav>
+);
+
+const HomePage=({setPage,onLogin})=>{
+  const [openFaq,setOpenFaq]=useState(null);
+  return <div>
+    {/* HERO */}
+    <div className="hero-gradient" style={{padding:'100px 24px',textAlign:'center',position:'relative',overflow:'hidden'}}>
+      <div style={{position:'absolute',inset:0,backgroundImage:'radial-gradient(ellipse 80% 50% at 50% -20%,rgba(37,99,235,.25),transparent)',pointerEvents:'none'}}/>
+      <div style={{maxWidth:760,margin:'0 auto',position:'relative'}}>
+        <div className="section-label" style={{marginBottom:20}}>VEX Override 2026–27 Coaching</div>
+        <h1 style={{fontSize:'clamp(40px,6vw,72px)',fontWeight:800,color:'#fff',lineHeight:1.05,letterSpacing:'-.03em',marginBottom:20}}>Your Student's Robot.<br/>Actually Competing.</h1>
+        <p style={{fontSize:18,color:'rgba(255,255,255,.65)',lineHeight:1.7,marginBottom:36,maxWidth:560,margin:'0 auto 36px'}}>1-on-1 and small group coaching for VEX students who want to go further than their school program takes them.</p>
+        <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
+          <button className="btn btn-orange btn-lg" onClick={()=>setPage('book')}>Book a Free Intake Session</button>
+          <button className="btn btn-ghost btn-lg" style={{color:'rgba(255,255,255,.8)',borderColor:'rgba(255,255,255,.2)'}} onClick={()=>setPage('curriculum')}>See the Curriculum →</button>
+        </div>
+        <p style={{marginTop:24,fontSize:13,color:'rgba(255,255,255,.35)'}}>No commitment. The intake session is free.</p>
+      </div>
+    </div>
+
+    {/* THREE OUTCOMES */}
+    <div style={{background:'var(--white)',borderBottom:'1px solid var(--border)',padding:'60px 24px'}}>
+      <div style={{maxWidth:1000,margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:32}}>
+        {[['🤖','A robot that competes','Not a kit sitting on a shelf. A built, tuned, competition-ready robot your student built with their own hands.'],['💻','Code on GitHub','Real C++ in a real GitHub repository with branching, commits, and a README. A portfolio piece that goes on college apps.'],['📓','A notebook that wins awards','An engineering notebook documented to VEX judging standards — the kind judges actually read at State and Worlds.']].map(([icon,title,desc])=>(
+          <div key={title} style={{textAlign:'center'}}>
+            <div style={{fontSize:36,marginBottom:14}}>{icon}</div>
+            <h3 style={{fontSize:18,fontWeight:700,marginBottom:10}}>{title}</h3>
+            <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.7}}>{desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* HOW IT WORKS */}
+    <div style={{padding:'80px 24px',background:'var(--bg)'}}>
+      <div style={{maxWidth:900,margin:'0 auto',textAlign:'center',marginBottom:48}}>
+        <div className="section-label" style={{marginBottom:12}}>How It Works</div>
+        <h2 style={{fontSize:40,fontWeight:800,letterSpacing:'-.02em'}}>Three steps. One season.</h2>
+      </div>
+      <div style={{maxWidth:900,margin:'0 auto',display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:24}}>
+        {[['01','Intake Session','We assess where your student is — prior experience, goals, competition schedule — and place them in the right curriculum module. 75 minutes. Free.'],['02','Structured Coaching','1-on-1 or small group sessions, 75–90 minutes, with a trained coach following the full Spark Academy curriculum. You get a parent summary after every session.'],['03','Competition Ready','Your student has a competition robot, coded autonomous, a GitHub portfolio, and an engineering notebook. They walk into competition with real preparation.']].map(([num,title,desc])=>(
+          <div key={num} className="card" style={{borderTop:'3px solid var(--blue)'}}>
+            <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:48,fontWeight:800,color:'var(--blue)',opacity:.15,lineHeight:1,marginBottom:8}}>{num}</div>
+            <h3 style={{fontSize:18,fontWeight:700,marginBottom:10}}>{title}</h3>
+            <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.7}}>{desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* WHO IT'S FOR */}
+    <div style={{background:'var(--navy)',padding:'80px 24px'}}>
+      <div style={{maxWidth:900,margin:'0 auto'}}>
+        <div style={{textAlign:'center',marginBottom:48}}>
+          <div className="section-label" style={{marginBottom:12}}>Who It's For</div>
+          <h2 style={{fontSize:40,fontWeight:800,color:'#fff',letterSpacing:'-.02em'}}>Two types of students.</h2>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:24}}>
+          {[['The student who wants to compete at the highest level.','You\'re on a school team but the program isn\'t deep enough. You want better autonomous, better code, better strategy. You want to qualify for State.','🏆'],['The student who doesn\'t have a school team.','You want to compete in VEX but your school doesn\'t have a program — or the program isn\'t for you. We prepare you to compete independently.','🚀']].map(([title,desc,icon])=>(
+            <div key={title} style={{background:'rgba(255,255,255,.05)',border:'1px solid rgba(255,255,255,.08)',borderRadius:14,padding:32}}>
+              <div style={{fontSize:32,marginBottom:16}}>{icon}</div>
+              <h3 style={{fontSize:20,fontWeight:700,color:'#fff',marginBottom:12}}>{title}</h3>
+              <p style={{fontSize:15,color:'rgba(255,255,255,.55)',lineHeight:1.7}}>{desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* COACH */}
+    <div style={{padding:'80px 24px',background:'var(--bg)'}}>
+      <div style={{maxWidth:900,margin:'0 auto',textAlign:'center',marginBottom:48}}>
+        <div className="section-label" style={{marginBottom:12}}>Your Coach</div>
+        <h2 style={{fontSize:40,fontWeight:800,letterSpacing:'-.02em'}}>Coached by someone who's been there.</h2>
+      </div>
+      <div style={{maxWidth:500,margin:'0 auto'}}>
+        <div className="coach-card" style={{textAlign:'center'}}>
+          <Avatar name="Ahriyen Kamran" size={72} bg='#2563EB'/>
+          <div style={{marginTop:16,marginBottom:4,fontSize:22,fontWeight:800,fontFamily:"'Bricolage Grotesque',sans-serif"}}>Ahriyen Kamran</div>
+          <div style={{fontSize:14,color:'var(--blue)',fontWeight:600,marginBottom:16}}>Founder & Head Coach</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:8,justifyContent:'center',marginBottom:16}}>
+            {['State Finalist','World Championship Semi-Finalist','Competed 2022–2026'].map(t=><span key={t} className="badge badge-navy">{t}</span>)}
+          </div>
+          <div style={{display:'flex',gap:8,justifyContent:'center',marginBottom:16}}>
+            {['Building','Programming','Driving'].map(t=><span key={t} className="badge badge-blue">{t}</span>)}
+          </div>
+          <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.7,fontStyle:'italic'}}>"Hands-on learning — build it, break it, understand why, improve it. That's the cycle. Every session."</p>
+          <div style={{marginTop:16,fontSize:13,color:'var(--text3)'}}>1-on-1 and small group sessions</div>
+        </div>
+      </div>
+    </div>
+
+    {/* FAQ */}
+    <div style={{padding:'80px 24px',background:'var(--white)',borderTop:'1px solid var(--border)'}}>
+      <div style={{maxWidth:720,margin:'0 auto'}}>
+        <div style={{textAlign:'center',marginBottom:48}}>
+          <div className="section-label" style={{marginBottom:12}}>FAQ</div>
+          <h2 style={{fontSize:40,fontWeight:800,letterSpacing:'-.02em'}}>Questions we actually get asked.</h2>
+        </div>
+        {FAQ_ITEMS.map((item,i)=>(
+          <div key={i} className="faq-item">
+            <div className="faq-q" onClick={()=>setOpenFaq(openFaq===i?null:i)}>
+              <span>{item.q}</span>
+              <span style={{color:'var(--text3)',fontSize:20}}>{openFaq===i?'−':'+'}</span>
+            </div>
+            {openFaq===i&&<div className="faq-a">{item.a}</div>}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* FOOTER CTA */}
+    <div style={{background:'var(--navy)',padding:'80px 24px',textAlign:'center'}}>
+      <div style={{maxWidth:600,margin:'0 auto'}}>
+        <div className="section-label" style={{marginBottom:16}}>Ready to Start?</div>
+        <h2 style={{fontSize:40,fontWeight:800,color:'#fff',marginBottom:16,letterSpacing:'-.02em'}}>Book a free intake session.</h2>
+        <p style={{fontSize:16,color:'rgba(255,255,255,.55)',marginBottom:32}}>75 minutes. We figure out where your student is, set a goal, and build a plan. No commitment required.</p>
+        <button className="btn btn-orange btn-lg" onClick={()=>setPage('book')}>Book Your Intake Session</button>
+        <div style={{marginTop:48,display:'flex',gap:40,justifyContent:'center',flexWrap:'wrap'}}>
+          {[['Privacy Policy',null],['Terms of Service',null],['Contact',null]].map(([label])=>(
+            <span key={label} style={{fontSize:13,color:'rgba(255,255,255,.3)',cursor:'pointer'}}>{label}</span>
+          ))}
+        </div>
+        <p style={{marginTop:24,fontSize:12,color:'rgba(255,255,255,.15)'}}>© 2026 Spark Academy</p>
+      </div>
+    </div>
+  </div>;
+};
+
+const CurriculumPage=({setPage})=>(
+  <div style={{maxWidth:1100,margin:'0 auto',padding:'60px 24px'}}>
+    <div style={{textAlign:'center',marginBottom:60}}>
+      <div className="section-label" style={{marginBottom:12}}>Curriculum</div>
+      <h1 style={{fontSize:48,fontWeight:800,letterSpacing:'-.03em',marginBottom:16}}>Structured. Session by session.</h1>
+      <p style={{fontSize:17,color:'var(--text2)',maxWidth:560,margin:'0 auto',lineHeight:1.7}}>Every session has a clear goal, a specific activity, and an exit standard the student must hit before moving forward.</p>
+    </div>
+    <div style={{display:'grid',gap:16,marginBottom:60}}>
+      {MODULES.map(m=>(
+        <div key={m.num} className="card" style={{display:'grid',gridTemplateColumns:'auto 1fr auto',gap:20,alignItems:'center'}}>
+          <div style={{width:52,height:52,borderRadius:12,background:'var(--blue-dim)',border:'2px solid rgba(37,99,235,.15)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:22,color:'var(--blue)'}}>M{m.num}</div>
+          <div>
+            <div style={{fontWeight:700,fontSize:17,marginBottom:4}}>Module {m.num} — {m.name}</div>
+            <div style={{fontSize:14,color:'var(--text2)',lineHeight:1.6}}>{m.desc}</div>
+          </div>
+          <div style={{textAlign:'right',flexShrink:0}}>
+            <div style={{fontSize:24,fontWeight:800,fontFamily:"'Bricolage Grotesque',sans-serif",color:'var(--navy)'}}>{m.sessions}</div>
+            <div style={{fontSize:12,color:'var(--text3)'}}>sessions</div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div style={{background:'var(--navy)',borderRadius:16,padding:40,color:'#fff'}}>
+      <div className="section-label" style={{marginBottom:12}}>What You Walk Away With</div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:24,marginTop:24}}>
+        {[['💻','GitHub Repository','All code, organized with branches and commit history'],['📓','Engineering Notebook','Documented to VEX judging standards'],['🏆','Competition Record','Events attended, placements, lessons learned'],['🎯','Skills Portfolio','Every exit standard earned, linked to the session'],['📄','Resume Credential','A paragraph a student can put on any application']].map(([icon,title,desc])=>(
+          <div key={title}>
+            <div style={{fontSize:24,marginBottom:8}}>{icon}</div>
+            <div style={{fontWeight:700,marginBottom:4,fontSize:15}}>{title}</div>
+            <div style={{fontSize:13,color:'rgba(255,255,255,.5)',lineHeight:1.6}}>{desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div style={{textAlign:'center',marginTop:48}}>
+      <button className="btn btn-orange btn-lg" onClick={()=>setPage('book')}>Book a Free Intake Session</button>
+    </div>
+  </div>
+);
+
+const CoachesPage=({setPage})=>(
+  <div style={{maxWidth:900,margin:'0 auto',padding:'60px 24px'}}>
+    <div style={{textAlign:'center',marginBottom:60}}>
+      <div className="section-label" style={{marginBottom:12}}>Our Coaches</div>
+      <h1 style={{fontSize:48,fontWeight:800,letterSpacing:'-.03em',marginBottom:16}}>Coached by competitors.</h1>
+      <p style={{fontSize:17,color:'var(--text2)',maxWidth:520,margin:'0 auto',lineHeight:1.7}}>Every Spark Academy coach has competed at the State or World Championship level. They know the game from the inside.</p>
+    </div>
+    <div className="coach-card" style={{display:'flex',gap:32,alignItems:'flex-start',flexWrap:'wrap'}}>
+      <div style={{textAlign:'center',minWidth:160}}>
+        <Avatar name="Ahriyen Kamran" size={80} bg='#2563EB'/>
+        <div style={{marginTop:12,fontWeight:800,fontSize:18,fontFamily:"'Bricolage Grotesque',sans-serif"}}>Ahriyen Kamran</div>
+        <div style={{fontSize:13,color:'var(--blue)',fontWeight:600,marginTop:4}}>Founder & Head Coach</div>
+      </div>
+      <div style={{flex:1,minWidth:280}}>
+        <div style={{display:'flex',flexWrap:'wrap',gap:8,marginBottom:16}}>
+          {['🏆 State Finalist','🌍 World Championship Semi-Finalist','4 Seasons Competed (2022–2026)'].map(t=><span key={t} className="badge badge-navy">{t}</span>)}
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10,marginBottom:20}}>
+          {[['Building','🔧'],['Programming','💻'],['Driving','🎮']].map(([label,icon])=>(
+            <div key={label} style={{background:'var(--blue-dim)',borderRadius:8,padding:'10px 12px',textAlign:'center'}}>
+              <div style={{fontSize:18,marginBottom:4}}>{icon}</div>
+              <div style={{fontSize:12,fontWeight:600,color:'var(--blue)'}}>{label}</div>
+            </div>
+          ))}
+        </div>
+        <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.8,marginBottom:16}}>"My coaching philosophy is simple: build it, break it, understand why it broke, then build it better. I don't believe in theoretical robotics. Every concept we cover in a session, we apply to a physical robot in the same session."</p>
+        <div style={{display:'flex',gap:8}}>
+          <span className="badge badge-green">1-on-1 Available</span>
+          <span className="badge badge-green">Small Group Available</span>
+        </div>
+      </div>
+    </div>
+    <div style={{marginTop:40,padding:28,background:'var(--blue-dim)',border:'1.5px solid rgba(37,99,235,.15)',borderRadius:14,textAlign:'center'}}>
+      <h3 style={{fontSize:20,fontWeight:700,marginBottom:8}}>Interested in coaching for Spark Academy?</h3>
+      <p style={{fontSize:14,color:'var(--text2)',marginBottom:16}}>We're building our coaching roster. If you've competed at State or Worlds and want to coach, reach out.</p>
+      <button className="btn btn-ghost btn-sm">Apply to Coach →</button>
+    </div>
+  </div>
+);
+
+const PricingPage=({setPage})=>(
+  <div style={{maxWidth:1100,margin:'0 auto',padding:'60px 24px'}}>
+    <div style={{textAlign:'center',marginBottom:60}}>
+      <div className="section-label" style={{marginBottom:12}}>Pricing</div>
+      <h1 style={{fontSize:48,fontWeight:800,letterSpacing:'-.03em',marginBottom:16}}>Transparent pricing. No surprises.</h1>
+      <p style={{fontSize:17,color:'var(--text2)',maxWidth:500,margin:'0 auto',lineHeight:1.7}}>Larger packages = lower per-session rate. All packages include curriculum access, parent summaries, and practice challenges.</p>
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:20,marginBottom:40}}>
+      {PACKAGES.map(pkg=>(
+        <div key={pkg.name} className={`pricing-card${pkg.popular?' featured':''}`} style={{position:'relative'}}>
+          {pkg.popular&&<div style={{position:'absolute',top:-14,left:'50%',transform:'translateX(-50%)',background:'var(--blue)',color:'#fff',fontSize:11,fontWeight:700,padding:'4px 14px',borderRadius:20,whiteSpace:'nowrap',letterSpacing:'.5px'}}>MOST POPULAR</div>}
+          <div style={{fontWeight:800,fontSize:20,fontFamily:"'Bricolage Grotesque',sans-serif",marginBottom:8}}>{pkg.name}</div>
+          <div style={{display:'flex',alignItems:'baseline',gap:6,marginBottom:4}}>
+            <span style={{fontSize:40,fontWeight:800,fontFamily:"'Bricolage Grotesque',sans-serif",color:pkg.popular?'var(--blue)':'var(--text)'}}>${pkg.price}</span>
+            <span style={{fontSize:14,color:'var(--text3)'}}>/ {pkg.sessions} sessions</span>
+          </div>
+          <div style={{fontSize:13,color:'var(--text3)',marginBottom:20}}>${pkg.perSession} per session</div>
+          <div style={{borderTop:'1px solid var(--border)',paddingTop:20,marginBottom:24}}>
+            {pkg.includes.map(item=><div key={item} style={{display:'flex',gap:8,marginBottom:8,fontSize:13}}><span className="pkg-check">✓</span><span style={{color:'var(--text2)'}}>{item}</span></div>)}
+          </div>
+          <button className={`btn btn-lg ${pkg.popular?'btn-primary':'btn-ghost'}`} style={{width:'100%'}} onClick={()=>setPage('book')}>Get Started</button>
+        </div>
+      ))}
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:24,marginBottom:40}}>
+      <div className="card">
+        <h3 style={{fontSize:17,fontWeight:700,marginBottom:12}}>Small Group Pricing</h3>
+        <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.7,marginBottom:12}}>All packages are available in small group format (2–4 students). Sessions are 90 minutes. Discounted per-student rate applies.</p>
+        <div style={{display:'flex',gap:8}}>
+          <span className="badge badge-green">Foundation Pack</span>
+          <span className="badge badge-green">Competition Ready</span>
+        </div>
+      </div>
+      <div className="card">
+        <h3 style={{fontSize:17,fontWeight:700,marginBottom:12}}>Drop-In Sessions</h3>
+        <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.7,marginBottom:12}}>Single 1-on-1 sessions available without a package. Higher per-session rate. Best for students who need targeted help on a specific topic before a competition.</p>
+        <span className="badge badge-orange">Highest per-session rate</span>
+      </div>
+    </div>
+    <div style={{background:'#F8FAFC',border:'1px solid var(--border)',borderRadius:12,padding:24,fontSize:14,color:'var(--text2)',lineHeight:1.7}}>
+      <strong>Cancellation Policy:</strong> Sessions can be rescheduled with 48 hours notice at no charge. Cancellations within 48 hours are counted as used sessions. Unused sessions expire 12 months after purchase.
+    </div>
+  </div>
+);
+
+const BookPage=({setPage})=>{
+  const [submitted,setSubmitted]=useState(false);
+  const [form,setForm]=useState({type:'1-on-1',level:'',days:'',name:'',email:'',phone:'',grade:'',coach:''});
+  if(submitted) return <div style={{maxWidth:560,margin:'80px auto',padding:24,textAlign:'center'}}>
+    <div style={{fontSize:56,marginBottom:16}}>✅</div>
+    <h2 style={{fontSize:28,fontWeight:800,marginBottom:12}}>Request Submitted</h2>
+    <p style={{fontSize:15,color:'var(--text2)',lineHeight:1.7,marginBottom:24}}>We'll reach out within 24 hours to schedule your free intake session. Check your email for a confirmation.</p>
+    <button className="btn btn-ghost" onClick={()=>setPage('home')}>← Back to Home</button>
+  </div>;
+  return <div style={{maxWidth:680,margin:'60px auto',padding:'0 24px 60px'}}>
+    <div style={{textAlign:'center',marginBottom:40}}>
+      <h1 style={{fontSize:40,fontWeight:800,letterSpacing:'-.02em',marginBottom:12}}>Book Your Intake Session</h1>
+      <p style={{fontSize:16,color:'var(--text2)'}}>Free · 75 minutes · We figure out where your student is and what they need.</p>
+    </div>
+    <div className="card">
+      <div className="form-grid">
+        <div>
+          <label>Session Type</label>
+          <div style={{display:'flex',gap:10,marginTop:4}}>
+            {['1-on-1','Small Group'].map(t=><button key={t} onClick={()=>setForm({...form,type:t})} className="btn btn-sm" style={{flex:1,background:form.type===t?'var(--blue)':'var(--white)',color:form.type===t?'#fff':'var(--text)',border:'1.5px solid',borderColor:form.type===t?'var(--blue)':'var(--border)'}}>{t}</button>)}
+          </div>
+        </div>
+        <div>
+          <label>Approximate Level</label>
+          <select value={form.level} onChange={e=>setForm({...form,level:e.target.value})}>
+            <option value="">Not sure — the intake will determine this</option>
+            <option>Starter — no prior VEX or coding experience</option>
+            <option>Builder — has handled VEX kit, no coding</option>
+            <option>Coder — knows basic C++, new to VEX hardware</option>
+            <option>Competitor — has competed before, wants to go deeper</option>
+          </select>
+        </div>
+        <div>
+          <label>Preferred Days / Times</label>
+          <input placeholder="e.g. Weekday evenings, Saturday mornings..." value={form.days} onChange={e=>setForm({...form,days:e.target.value})}/>
+        </div>
+        <div className="form-row">
+          <div><label>Student Name</label><input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="First and last name"/></div>
+          <div><label>Grade</label><select value={form.grade} onChange={e=>setForm({...form,grade:e.target.value})}><option value="">Select grade</option>{[6,7,8,9,10,11,12].map(g=><option key={g}>Grade {g}</option>)}</select></div>
+        </div>
+        <div className="form-row">
+          <div><label>Parent Email</label><input type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="parent@email.com"/></div>
+          <div><label>Parent Phone</label><input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="(555) 000-0000"/></div>
+        </div>
+        <div>
+          <label>Preferred Coach (Optional)</label>
+          <select value={form.coach} onChange={e=>setForm({...form,coach:e.target.value})}>
+            <option value="">Assign me a coach</option>
+            <option>Ahriyen Kamran</option>
+          </select>
+        </div>
+        <button className="btn btn-orange btn-lg" style={{width:'100%'}} onClick={()=>setSubmitted(true)}>Submit Request</button>
+        <p style={{fontSize:12,color:'var(--text3)',textAlign:'center'}}>You'll receive a confirmation email within 24 hours with intake scheduling info.</p>
+      </div>
+    </div>
+  </div>;
+};
+
+const PublicSite=({onLogin})=>{
+  const [page,setPage]=useState('home');
+  const pages={home:<HomePage setPage={setPage} onLogin={onLogin}/>,curriculum:<CurriculumPage setPage={setPage}/>,coaches:<CoachesPage setPage={setPage}/>,pricing:<PricingPage setPage={setPage}/>,book:<BookPage setPage={setPage}/>};
+  return <div><PublicHeader page={page} setPage={setPage} onLogin={onLogin}/><div style={{minHeight:'100vh'}}>{pages[page]||pages.home}</div></div>;
+};
+
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
+const ACCOUNTS=[
+  {id:'alex',type:'student',name:'Alex Chen',sub:'Student · Module 2 · Competition Ready',avatar:'AC',bg:'#2563EB'},
+  {id:'sam',type:'student',name:'Sam Rivera',sub:'Student · Module 3 · PROS+LemLib',avatar:'SR',bg:'#7C3AED'},
+  {id:'jordan',type:'student',name:'Jordan Lee',sub:'Student · Module 1 · Foundations',avatar:'JL',bg:'#0891B2'},
+  {id:'parent_alex',type:'parent',name:'Alex\'s Parent',sub:'Parent Account · Alex Chen',avatar:'AP',bg:'#059669'},
+  {id:'ahriyen',type:'coach',name:'Ahriyen Kamran',sub:'Coach · 3 Active Students',avatar:'AK',bg:'#DC2626'},
+  {id:'admin',type:'admin',name:'Admin',sub:'Spark Academy Operations',avatar:'AD',bg:'#9333EA'},
+];
+
+const LoginPage=({onLogin,onBack})=>{
+  const [selected,setSelected]=useState(null);
+  return <div style={{minHeight:'100vh',background:'var(--bg)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24}}>
+    <div style={{cursor:'pointer',marginBottom:32,display:'flex',alignItems:'center',gap:8}} onClick={onBack}>
+      <div style={{width:36,height:36,background:'var(--blue)',borderRadius:9,display:'flex',alignItems:'center',justifyContent:'center',fontSize:18}}>⚡</div>
+      <span style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:20,letterSpacing:'-.3px'}}>Spark Academy</span>
+    </div>
+    <div style={{background:'var(--white)',border:'1px solid var(--border)',borderRadius:16,padding:32,width:'100%',maxWidth:440}}>
+      <h2 style={{fontSize:22,fontWeight:800,marginBottom:4}}>Sign In</h2>
+      <p style={{fontSize:14,color:'var(--text2)',marginBottom:24}}>Select a demo account to explore the platform</p>
+      {[['Students',ACCOUNTS.filter(a=>a.type==='student')],['Parent',ACCOUNTS.filter(a=>a.type==='parent')],['Coach',ACCOUNTS.filter(a=>a.type==='coach')],['Admin',ACCOUNTS.filter(a=>a.type==='admin')]].map(([label,accounts])=>(
+        <div key={label} style={{marginBottom:16}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',letterSpacing:'1px',textTransform:'uppercase',marginBottom:8}}>{label}</div>
+          {accounts.map(a=>(
+            <div key={a.id} onClick={()=>setSelected(a)} style={{display:'flex',alignItems:'center',gap:12,padding:12,borderRadius:10,border:`2px solid ${selected?.id===a.id?'var(--blue)':'var(--border)'}`,cursor:'pointer',marginBottom:6,background:selected?.id===a.id?'var(--blue-dim)':'transparent',transition:'all .15s'}}>
+              <Avatar name={a.name} size={36} bg={a.bg}/>
+              <div style={{flex:1}}><div style={{fontSize:14,fontWeight:600}}>{a.name}</div><div style={{fontSize:12,color:'var(--text2)'}}>{a.sub}</div></div>
+              {selected?.id===a.id&&<span style={{color:'var(--blue)',fontSize:16,fontWeight:700}}>✓</span>}
+            </div>
+          ))}
+        </div>
+      ))}
+      <button className="btn btn-primary btn-lg" style={{width:'100%',marginTop:8,opacity:selected?1:.45}} onClick={()=>selected&&onLogin(selected)}>Sign In {selected?`as ${selected.name.split(' ')[0]}`:''}</button>
+    </div>
+    <button className="btn btn-ghost btn-sm" style={{marginTop:16}} onClick={onBack}>← Back to site</button>
+  </div>;
+};
+
+// ── APP SHELL ─────────────────────────────────────────────────────────────────
+const Sidebar=({user,page,setPage,links,onLogout})=>(
+  <div style={{width:240,background:'var(--navy)',display:'flex',flexDirection:'column',height:'100vh',position:'fixed',left:0,top:0,flexShrink:0,zIndex:10,overflow:'hidden'}}>
+    <div style={{padding:'20px 16px',borderBottom:'1px solid rgba(255,255,255,.06)'}}>
+      <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:16}}>
+        <div style={{width:28,height:28,background:'var(--blue)',borderRadius:7,display:'flex',alignItems:'center',justifyContent:'center',fontSize:14}}>⚡</div>
+        <span style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:16,color:'#fff',letterSpacing:'-.2px'}}>Spark Academy</span>
+      </div>
+      <div style={{display:'flex',alignItems:'center',gap:10}}>
+        <Avatar name={user.name} size={32} bg={user.bg||'#2563EB'}/>
+        <div style={{overflow:'hidden'}}>
+          <div style={{fontSize:13,fontWeight:600,color:'#fff',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{user.name}</div>
+          <div style={{fontSize:10,color:'rgba(255,255,255,.35)',textTransform:'uppercase',letterSpacing:'1px'}}>{user.type}</div>
+        </div>
+      </div>
+    </div>
+    <div style={{flex:1,padding:'10px 8px',overflowY:'auto'}}>
+      {links.map(([id,label,icon])=>(
+        <button key={id} className={`sidebar-link${page===id?' active':''}`} onClick={()=>setPage(id)}>
+          <span style={{fontSize:16,width:20,textAlign:'center'}}>{icon}</span><span>{label}</span>
+        </button>
+      ))}
+    </div>
+    <div style={{padding:'12px 8px',borderTop:'1px solid rgba(255,255,255,.06)'}}>
+      <button className="sidebar-link" onClick={()=>setPage('settings')}><span style={{fontSize:16,width:20,textAlign:'center'}}>⚙</span><span>Settings</span></button>
+      <button className="sidebar-link" onClick={onLogout} style={{color:'rgba(255,100,100,.7)'}}><span style={{fontSize:16,width:20,textAlign:'center'}}>↩</span><span>Sign Out</span></button>
+    </div>
+  </div>
+);
+
+const TopBar=({title,actions})=>(
+  <div style={{height:56,background:'var(--white)',borderBottom:'1px solid var(--border)',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 28px',position:'sticky',top:0,zIndex:5}}>
+    <h1 style={{fontSize:18,fontWeight:800,letterSpacing:'-.01em'}}>{title}</h1>
+    <div style={{display:'flex',alignItems:'center',gap:10}}>
+      {actions}
+      <div style={{width:34,height:34,borderRadius:8,background:'var(--border)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',fontSize:16}}>🔔</div>
+    </div>
+  </div>
+);
+
+// ── STUDENT APP ───────────────────────────────────────────────────────────────
+const StudentApp=({user,onLogout})=>{
+  const [page,setPage]=useState('dashboard');
+  const student=STUDENTS.find(s=>s.id===user.id)||STUDENTS[0];
+  const links=[['dashboard','Dashboard','⊞'],['curriculum','My Curriculum','📚'],['sessions','Sessions','📅'],['portfolio','Portfolio','🎯'],['challenges','Practice','⚡'],['messages','Messages','💬']];
+
+  const renderPage=()=>{
+    if(page==='dashboard') return <StudentDashboard student={student} setPage={setPage}/>;
+    if(page==='curriculum') return <StudentCurriculum student={student}/>;
+    if(page==='sessions') return <StudentSessions student={student}/>;
+    if(page==='portfolio') return <StudentPortfolio student={student}/>;
+    if(page==='challenges') return <StudentChallenges student={student}/>;
+    if(page==='messages') return <StudentMessages student={student}/>;
+    if(page==='settings') return <SettingsPage user={user}/>;
+    return <StudentDashboard student={student} setPage={setPage}/>;
+  };
+
+  return <div style={{display:'flex',background:'var(--bg)',minHeight:'100vh'}}>
+    <Sidebar user={{...user,type:'Student'}} page={page} setPage={setPage} links={links} onLogout={onLogout}/>
+    <div style={{flex:1,marginLeft:240,display:'flex',flexDirection:'column',minHeight:'100vh'}}>
+      <TopBar title={links.find(l=>l[0]===page)?.[1]||'Settings'}/>
+      <div style={{flex:1,padding:28,maxWidth:1100}}>{renderPage()}</div>
+    </div>
+  </div>;
+};
+
+const StudentDashboard=({student,setPage})=>{
+  const sessions=SESSIONS_HISTORY.filter(s=>s.studentId===student.id);
+  const challenges=CHALLENGES.filter(c=>c.studentId===student.id);
+  const daysUntil=student.competition?Math.max(0,Math.ceil((new Date(student.competition)-new Date())/(86400000))):null;
+  const modPct=Math.round((student.session/8)*100);
+  return <div>
+    <div style={{marginBottom:28}}>
+      <h2 style={{fontSize:28,fontWeight:800,letterSpacing:'-.02em'}}>Welcome back, {student.name.split(' ')[0]} 👋</h2>
+      <p style={{color:'var(--text2)',fontSize:14,marginTop:4}}>{student.track} · Module {student.module} · {student.status==='ahead'?'Ahead of schedule':'On schedule'}</p>
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr',gap:12,marginBottom:24}}>
+      {[[student.totalSessions,'Sessions','Total','var(--blue)'],[student.githubCommits,'Commits','GitHub','#7C3AED'],[student.notebookPages,'Pages','Notebook','var(--green)'],[daysUntil!==null?daysUntil:'—','Days','Until Competition','var(--orange)']].map(([val,label,sub,color])=>(
+        <div key={label} className="card" style={{borderTop:`3px solid ${color}`}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}}>{sub}</div>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:36,fontWeight:800,color,lineHeight:1}}>{val}</div>
+          <div style={{fontSize:13,color:'var(--text2)',marginTop:4}}>{label}</div>
+        </div>
+      ))}
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'2fr 1fr',gap:16}}>
+      <div style={{display:'flex',flexDirection:'column',gap:16}}>
+        <div className="card" style={{borderLeft:'4px solid var(--blue)'}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}}>Next Session</div>
+          <div style={{fontWeight:700,fontSize:17,marginBottom:6}}>First Override Autonomous — Write + Test</div>
+          <div style={{display:'flex',gap:8,flexWrap:'wrap'}}><FormatBadge fmt="Online + Hands-on"/><span className="badge badge-blue">Module {student.module} · Session {student.session+1}</span><span className="badge badge-gray">90 min</span></div>
+          <div style={{marginTop:12,display:'flex',gap:8}}>
+            <button className="btn btn-primary btn-sm" onClick={()=>setPage('curriculum')}>Prep Materials</button>
+          </div>
+        </div>
+        <div className="card">
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
+            <div style={{fontWeight:700}}>Season Progress</div>
+            <span style={{fontSize:13,color:'var(--text3)'}}>Module {student.module}</span>
+          </div>
+          {[['Module 1','Foundation',100,'var(--green)'],['Module 2','Building',Math.round((student.session/6)*100),'var(--blue)'],['Module 3','Programming',0,'var(--text3)']].map(([m,name,pct,color])=>(
+            <div key={m} style={{marginBottom:12}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:13,marginBottom:5}}><span style={{fontWeight:500}}>{m} — {name}</span><span style={{color:'var(--text3)'}}>{pct}%</span></div>
+              <div className="progress-bar"><div className="progress-fill" style={{width:`${pct}%`,background:color}}/></div>
+            </div>
+          ))}
+        </div>
+        {sessions[0]&&<div className="card">
+          <div style={{fontWeight:700,marginBottom:12}}>Last Session Recap</div>
+          <div style={{fontSize:12,color:'var(--text3)',marginBottom:8}}>{sessions[0].date} · {sessions[0].topic}</div>
+          <p style={{fontSize:13,color:'var(--text2)',lineHeight:1.7}}>{sessions[0].coachNotes}</p>
+        </div>}
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:16}}>
+        {daysUntil!==null&&<div className="card" style={{textAlign:'center',border:'2px solid var(--orange)',background:'var(--orange-dim)'}}>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:52,fontWeight:800,color:'var(--orange)',lineHeight:1}}>{daysUntil}</div>
+          <div style={{fontSize:13,color:'#9A3412',marginTop:4,fontWeight:600}}>days until competition</div>
+          <div style={{fontSize:12,color:'var(--text3)',marginTop:4}}>{student.competition}</div>
+        </div>}
+        <div className="card">
+          <div style={{fontWeight:700,marginBottom:12}}>Practice Challenge</div>
+          {challenges[0]&&<div>
+            <div style={{fontSize:13,color:'var(--text2)',lineHeight:1.7,marginBottom:12}}>{challenges[0].text}</div>
+            <StatusBadge s={challenges[0].status}/>
+          </div>}
+        </div>
+        <div className="card">
+          <div style={{fontWeight:700,marginBottom:12}}>Skills Earned</div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+            {student.skillsEarned.slice(0,4).map(s=><span key={s} className="skill-badge earned">{s}</span>)}
+            {student.skillsEarned.length>4&&<span className="skill-badge" style={{background:'#F1F5F9',color:'var(--text3)'}}>+{student.skillsEarned.length-4} more</span>}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>;
+};
+
+const StudentCurriculum=({student})=>{
+  const [activeModule,setActiveModule]=useState(1);
+  const [selectedSession,setSelectedSession]=useState(null);
+  const mod1Done=student.module>1||(student.module===1&&student.session>4);
+  const sessions=activeModule===1?MODULE1_SESSIONS:MODULE1_SESSIONS.map((s,i)=>({...s,status:i<2?'complete':i===2?'upcoming':'locked'}));
+  if(selectedSession) return <SessionDetailView session={selectedSession} onBack={()=>setSelectedSession(null)}/>;
+  return <div>
+    <div style={{display:'flex',gap:8,marginBottom:24,flexWrap:'wrap'}}>
+      {MODULES.slice(0,5).map(m=>(
+        <button key={m.num} className={`module-tab${activeModule===m.num?' active':''}`} onClick={()=>setActiveModule(m.num)}>M{m.num} {m.name}</button>
+      ))}
+    </div>
+    <div className="card" style={{marginBottom:16}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:16}}>
+        <div>
+          <div style={{fontWeight:800,fontSize:18,fontFamily:"'Bricolage Grotesque',sans-serif"}}>Module {activeModule} — {MODULES[activeModule-1].name}</div>
+          <div style={{fontSize:13,color:'var(--text2)',marginTop:4}}>{MODULES[activeModule-1].desc}</div>
+        </div>
+        <ModuleProgress current={activeModule===1?Math.min(student.session,8):2} total={MODULES[activeModule-1].sessions}/>
+      </div>
+    </div>
+    <div style={{display:'flex',flexDirection:'column',gap:8}}>
+      {sessions.map((s,i)=>{
+        const isComplete=s.status==='complete';
+        const isLocked=s.status==='locked';
+        const isUpcoming=s.status==='upcoming';
+        return <div key={i} className={`session-row${isComplete?' complete':''}${isLocked?' locked':''}`} onClick={()=>!isLocked&&setSelectedSession(s)}>
+          <div style={{width:36,height:36,borderRadius:8,border:`2px solid ${isComplete?'var(--green)':isUpcoming?'var(--blue)':'var(--border)'}`,background:isComplete?'var(--green-dim)':isUpcoming?'var(--blue-dim)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+            {isComplete?<span style={{color:'var(--green)',fontSize:16}}>✓</span>:isLocked?<span style={{fontSize:14}}>🔒</span>:<span style={{color:'var(--blue)',fontSize:13,fontWeight:700}}>{i+1}</span>}
+          </div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:600,fontSize:14,marginBottom:3}}>{s.title}</div>
+            <div style={{fontSize:12,color:'var(--text3)'}}>{s.duration} · {s.format}</div>
+          </div>
+          {isComplete&&<span className="badge badge-green">Complete</span>}
+          {isUpcoming&&<span className="badge badge-blue">Upcoming</span>}
+          {isLocked&&<span className="badge badge-gray">Locked</span>}
+          {!isLocked&&<span style={{color:'var(--text3)',fontSize:14}}>›</span>}
+        </div>;
+      })}
+    </div>
+  </div>;
+};
+
+const SessionDetailView=({session,onBack})=>(
+  <div>
+    <button className="btn btn-ghost btn-sm" style={{marginBottom:20}} onClick={onBack}>← Back to Curriculum</button>
+    <div className="card" style={{marginBottom:16}}>
+      <div style={{display:'flex',gap:10,alignItems:'center',marginBottom:4}}>
+        <span className="badge badge-blue">Session {session.num}</span>
+        <StatusBadge s={session.status}/>
+        <FormatBadge fmt={session.format}/>
+      </div>
+      <h2 style={{fontSize:22,fontWeight:800,fontFamily:"'Bricolage Grotesque',sans-serif",marginBottom:4,marginTop:8}}>{session.title}</h2>
+      <div style={{fontSize:14,color:'var(--text3)'}}>{session.duration}</div>
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:16}}>
+      <div className="card">
+        <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:12}}>Before the Session</div>
+        <div style={{fontSize:14,fontWeight:700,color:'var(--blue)',marginBottom:8}}>Session Goal</div>
+        <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.7,marginBottom:16}}>By the end of today's session you will be able to: {session.exitStd}.</p>
+        <div style={{fontSize:14,fontWeight:700,marginBottom:8}}>What to Have Ready</div>
+        <div style={{fontSize:13,color:'var(--text2)'}}>✓ Your robot with drivetrain assembled<br/>✓ Laptop with VS Code open<br/>✓ Current code project loaded<br/>✓ Notebook open to a new page</div>
+      </div>
+      <div className="card" style={{background:'var(--orange-dim)',border:'1.5px solid var(--orange-border)'}}>
+        <div style={{fontSize:11,fontWeight:700,color:'#9A3412',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:12}}>Exit Standard</div>
+        <p style={{fontSize:14,color:'#7C2D12',lineHeight:1.7,fontWeight:500}}>{session.exitStd}</p>
+        <div style={{marginTop:16,fontSize:12,color:'#9A3412'}}>This session is marked complete only after your coach confirms you've hit this standard.</div>
+      </div>
+    </div>
+    {session.status==='complete'&&<div className="card" style={{background:'var(--green-dim)',border:'1.5px solid rgba(16,185,129,.2)'}}>
+      <div style={{fontSize:11,fontWeight:700,color:'#065F46',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}}>Session Complete</div>
+      <p style={{fontSize:14,color:'#065F46'}}>Your coach marked this session complete. Coach notes and your session recap are available below.</p>
+    </div>}
+  </div>
+);
+
+const StudentSessions=({student})=>{
+  const history=SESSIONS_HISTORY.filter(s=>s.studentId===student.id);
+  return <div>
+    <div style={{marginBottom:24}}>
+      <div className="alert alert-blue"><span>📅</span><span>Your next session: <strong>First Override Autonomous — Write + Test</strong> — scheduled for next week. Prep materials are ready.</span></div>
+    </div>
+    <div style={{fontWeight:700,marginBottom:12}}>Session History</div>
+    {history.map(s=>(
+      <div key={s.id} className="card" style={{marginBottom:12}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
+          <div>
+            <div style={{fontWeight:700,fontSize:15}}>{s.topic}</div>
+            <div style={{fontSize:13,color:'var(--text3)',marginTop:2}}>{s.date} · {s.duration} min · Module {s.module}, Session {s.sessionNum}</div>
+          </div>
+          <span className={`badge ${s.exitMet?'badge-green':'badge-orange'}`}>{s.exitMet?'Exit Standard Met':'Partial'}</span>
+        </div>
+        <div style={{background:'var(--bg)',borderRadius:8,padding:12,marginBottom:10}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:6}}>Coach Notes</div>
+          <p style={{fontSize:13,color:'var(--text2)',lineHeight:1.7}}>{s.coachNotes}</p>
+        </div>
+        <div style={{background:'#FFF7ED',borderRadius:8,padding:12,border:'1px solid var(--orange-border)'}}>
+          <div style={{fontSize:11,fontWeight:700,color:'#9A3412',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:6}}>Practice Challenge</div>
+          <p style={{fontSize:13,color:'#7C2D12',lineHeight:1.6}}>{s.challenge}</p>
+        </div>
+      </div>
+    ))}
+  </div>;
+};
+
+const StudentPortfolio=({student})=>{
+  const allSkills=ALL_SKILLS;
+  return <div>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:24}}>
+      {[[student.githubCommits,'GitHub Commits','var(--blue)'],[student.notebookPages,'Notebook Pages','var(--green)'],[student.competitionRecord.length,'Competitions Attended','var(--orange)']].map(([val,label,color])=>(
+        <div key={label} className="card" style={{textAlign:'center',borderTop:`3px solid ${color}`}}>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:40,fontWeight:800,color}}>{val}</div>
+          <div style={{fontSize:13,color:'var(--text2)',marginTop:4}}>{label}</div>
+        </div>
+      ))}
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:16}}>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:4}}>GitHub Repository</div>
+        {student.githubUrl?<><div style={{fontSize:13,color:'var(--blue)',marginBottom:12,wordBreak:'break-all'}}>{student.githubUrl}</div>
+        <div style={{display:'flex',gap:8}}><span className="badge badge-navy">{student.githubCommits} commits</span><span className="badge badge-green">Active</span></div></>:<div style={{fontSize:14,color:'var(--text3)',padding:'16px 0'}}>No GitHub repository linked yet. Connect in Settings.</div>}
+      </div>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:4}}>Engineering Notebook</div>
+        <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:12}}>
+          <div style={{textAlign:'center'}}>
+            <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:32,fontWeight:800,color:'var(--green)'}}>{student.notebookPages}</div>
+            <div style={{fontSize:12,color:'var(--text3)'}}>pages</div>
+          </div>
+          <ProgressRing pct={Math.round((student.notebookPages/60)*100)} color="var(--green)"/>
+        </div>
+        <button className="btn btn-ghost btn-sm">Upload Page Photos</button>
+      </div>
+    </div>
+    <div className="card" style={{marginBottom:16}}>
+      <div style={{fontWeight:700,marginBottom:16}}>Competition Record</div>
+      {student.competitionRecord.length===0?<div style={{fontSize:14,color:'var(--text3)',padding:'16px 0',textAlign:'center'}}>No competitions yet. Add your first competition date in Settings.</div>:<table style={{width:'100%',borderCollapse:'collapse',fontSize:14}}>
+        <thead><tr style={{borderBottom:'2px solid var(--border)'}}>{['Event','Date','Placement'].map(h=><th key={h} style={{textAlign:'left',padding:'6px 10px',fontSize:11,color:'var(--text3)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.5px'}}>{h}</th>)}</tr></thead>
+        <tbody>{student.competitionRecord.map((r,i)=><tr key={i} style={{borderBottom:'1px solid var(--border)'}}><td style={{padding:'10px'}}>{r.name}</td><td style={{padding:'10px',color:'var(--text2)'}}>{r.date}</td><td style={{padding:'10px'}}><span className="badge badge-blue">{r.placement}</span></td></tr>)}</tbody>
+      </table>}
+    </div>
+    <div className="card">
+      <div style={{fontWeight:700,marginBottom:16}}>Skills Portfolio</div>
+      <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
+        {allSkills.map(skill=><span key={skill} className={`skill-badge${student.skillsEarned.includes(skill)?' earned':''}`}>{student.skillsEarned.includes(skill)?'✓ ':''}{skill}</span>)}
+      </div>
+    </div>
+  </div>;
+};
+
+const StudentChallenges=({student})=>{
+  const [challenges,setChallenges]=useState(CHALLENGES.filter(c=>c.studentId===student.id));
+  const toggle=(id)=>setChallenges(ch=>ch.map(c=>c.id===id?{...c,status:c.status==='complete'?'in-progress':'complete'}:c));
+  return <div>
+    <div className="alert alert-blue" style={{marginBottom:24}}><span>⚡</span><span>Practice challenges are optional and take 10–15 minutes. They're designed to keep skills fresh between sessions.</span></div>
+    {challenges.map(c=>(
+      <div key={c.id} className="card" style={{marginBottom:12,borderLeft:`4px solid ${c.status==='complete'?'var(--green)':'var(--border)'}`,opacity:c.status==='complete'?.8:1}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
+          <StatusBadge s={c.status}/>
+          <button className="btn btn-sm" style={{background:c.status==='complete'?'var(--green-dim)':'var(--blue-dim)',color:c.status==='complete'?'var(--green)':'var(--blue)',border:'none',cursor:'pointer'}} onClick={()=>toggle(c.id)}>{c.status==='complete'?'Mark Incomplete':'Mark Complete'}</button>
+        </div>
+        <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.7}}>{c.text}</p>
+      </div>
+    ))}
+  </div>;
+};
+
+const StudentMessages=({student})=>{
+  const [msg,setMsg]=useState('');
+  const [msgs,setMsgs]=useState([{from:'coach',text:'Great work in our last session, Alex! Your path planning was really solid.',time:'Nov 3, 2:45 PM'},{from:'student',text:'Thanks! I have a question about the 12-second rule — does the preload count toward the 7-pin target?',time:'Nov 3, 4:12 PM'},{from:'coach',text:'Yes! The preload absolutely counts. Score it first — it\'s the easiest guaranteed pin in autonomous.',time:'Nov 3, 4:30 PM'}]);
+  const send=()=>{if(msg.trim()){setMsgs([...msgs,{from:'student',text:msg,time:'Just now'}]);setMsg('');}};
+  return <div style={{maxWidth:640}}>
+    <div style={{marginBottom:12,fontSize:13,color:'var(--text2)'}}>Conversation with Ahriyen Kamran · Responses within 24 hours</div>
+    <div className="card" style={{marginBottom:12,minHeight:300,maxHeight:500,overflowY:'auto',display:'flex',flexDirection:'column',gap:12}}>
+      {msgs.map((m,i)=><div key={i} style={{display:'flex',flexDirection:m.from==='coach'?'row':'row-reverse',gap:10}}>
+        <Avatar name={m.from==='coach'?'AK':'Alex Chen'} size={32} bg={m.from==='coach'?'#DC2626':'var(--blue)'}/>
+        <div style={{maxWidth:'75%'}}>
+          <div style={{background:m.from==='coach'?'var(--white)':'var(--blue)',color:m.from==='coach'?'var(--text)':'#fff',borderRadius:12,padding:'10px 14px',fontSize:14,lineHeight:1.6,border:m.from==='coach'?'1px solid var(--border)':'none'}}>{m.text}</div>
+          <div style={{fontSize:11,color:'var(--text3)',marginTop:3,textAlign:m.from==='coach'?'left':'right'}}>{m.time}</div>
+        </div>
+      </div>)}
+    </div>
+    <div style={{display:'flex',gap:10}}>
+      <input value={msg} onChange={e=>setMsg(e.target.value)} placeholder="Message your coach..." onKeyDown={e=>e.key==='Enter'&&send()}/>
+      <button className="btn btn-primary" onClick={send}>Send</button>
+    </div>
+  </div>;
+};
+
+// ── PARENT APP ────────────────────────────────────────────────────────────────
+const ParentApp=({user,onLogout})=>{
+  const [page,setPage]=useState('dashboard');
+  const student=STUDENTS[0];
+  const links=[['dashboard','Dashboard','⊞'],['sessions','Session History','📋'],['upcoming','Upcoming','📅'],['billing','Billing','💳'],['messages','Messages','💬']];
+  const render=()=>{
+    if(page==='dashboard') return <ParentDashboard student={student}/>;
+    if(page==='sessions') return <ParentSessions student={student}/>;
+    if(page==='billing') return <ParentBilling/>;
+    if(page==='messages') return <StudentMessages student={student}/>;
+    if(page==='settings') return <SettingsPage user={user}/>;
+    return <ParentDashboard student={student}/>;
+  };
+  return <div style={{display:'flex',background:'var(--bg)',minHeight:'100vh'}}>
+    <Sidebar user={{...user,type:'Parent',bg:'#059669'}} page={page} setPage={setPage} links={links} onLogout={onLogout}/>
+    <div style={{flex:1,marginLeft:240,display:'flex',flexDirection:'column'}}>
+      <TopBar title={links.find(l=>l[0]===page)?.[1]||'Settings'}/>
+      <div style={{flex:1,padding:28,maxWidth:1100}}>{render()}</div>
+    </div>
+  </div>;
+};
+
+const ParentDashboard=({student})=>{
+  const latest=SESSIONS_HISTORY.filter(s=>s.studentId===student.id)[0];
+  return <div>
+    <div style={{marginBottom:24}}><h2 style={{fontSize:24,fontWeight:800}}>{student.name}'s Progress</h2><p style={{fontSize:14,color:'var(--text2)',marginTop:4}}>Module {student.module} · {student.track}</p></div>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:24}}>
+      {[['Module '+student.module,'Current Phase','var(--blue)'],['Session '+student.session+' of 8','Current Session','var(--orange)'],[student.competition||'Not set','Next Competition','var(--green)']].map(([val,label,color])=>(
+        <div key={label} className="card" style={{borderTop:`3px solid ${color}`}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}}>{label}</div>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:20,fontWeight:800,color}}>{val}</div>
+        </div>
+      ))}
+    </div>
+    {latest&&<div className="card" style={{marginBottom:16}}>
+      <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:12}}>Last Session Summary</div>
+      <div style={{fontWeight:700,marginBottom:4}}>{latest.topic}</div>
+      <div style={{fontSize:12,color:'var(--text3)',marginBottom:12}}>{latest.date} · {latest.duration} minutes</div>
+      <p style={{fontSize:14,color:'var(--text2)',lineHeight:1.7,background:'var(--bg)',padding:14,borderRadius:8}}>{latest.parentSummary}</p>
+    </div>}
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:12}}>Next Session</div>
+        <div style={{fontWeight:600,marginBottom:4}}>First Override Autonomous — Write + Test</div>
+        <div style={{fontSize:13,color:'var(--text2)'}}>Module 3 · Session {student.session+1} · 90 min</div>
+      </div>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:12}}>Package Status</div>
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
+          <span style={{fontSize:14,color:'var(--text2)'}}>Competition Ready</span>
+          <span className="badge badge-green">Active</span>
+        </div>
+        <div style={{fontSize:13,color:'var(--text2)',marginBottom:8}}>8 sessions remaining</div>
+        <div className="progress-bar"><div className="progress-fill" style={{width:'60%',background:'var(--blue)'}}/></div>
+      </div>
+    </div>
+  </div>;
+};
+
+const ParentSessions=({student})=>{
+  const history=SESSIONS_HISTORY.filter(s=>s.studentId===student.id);
+  return <div>
+    {history.map(s=>(
+      <div key={s.id} className="card" style={{marginBottom:12}}>
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:10}}>
+          <div><div style={{fontWeight:700}}>{s.topic}</div><div style={{fontSize:12,color:'var(--text3)',marginTop:2}}>{s.date} · {s.duration} min</div></div>
+          <span className={`badge ${s.exitMet?'badge-green':'badge-orange'}`}>{s.exitMet?'Exit Standard Met':'Partial'}</span>
+        </div>
+        <div style={{background:'var(--bg)',borderRadius:8,padding:12}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:6}}>Parent Summary</div>
+          <p style={{fontSize:13,color:'var(--text2)',lineHeight:1.7}}>{s.parentSummary}</p>
+        </div>
+      </div>
+    ))}
+  </div>;
+};
+
+const ParentBilling=()=>(
+  <div style={{maxWidth:700}}>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:24}}>
+      {[['Competition Ready','Package','var(--blue)'],['8 sessions','Remaining','var(--green)'],['$1,100','Total Paid','var(--orange)']].map(([val,label,color])=>(
+        <div key={label} className="card" style={{borderTop:`3px solid ${color}`}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}}>{label}</div>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:22,fontWeight:800,color}}>{val}</div>
+        </div>
+      ))}
+    </div>
+    <div className="card" style={{marginBottom:16}}>
+      <div style={{fontWeight:700,marginBottom:16}}>Payment History</div>
+      <table style={{width:'100%',borderCollapse:'collapse',fontSize:14}}>
+        <thead><tr style={{borderBottom:'2px solid var(--border)'}}>{['Date','Package','Amount','Status'].map(h=><th key={h} style={{textAlign:'left',padding:'8px 10px',fontSize:11,color:'var(--text3)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.5px'}}>{h}</th>)}</tr></thead>
+        <tbody>
+          <tr style={{borderBottom:'1px solid var(--border)'}}><td style={{padding:'10px'}}>Sep 1, 2026</td><td style={{padding:'10px'}}>Competition Ready</td><td style={{padding:'10px',fontWeight:600}}>$1,100.00</td><td style={{padding:'10px'}}><span className="badge badge-green">Paid</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style={{display:'flex',gap:10}}>
+      <button className="btn btn-primary btn-sm">Purchase Additional Sessions</button>
+      <button className="btn btn-ghost btn-sm">Download Invoice</button>
+    </div>
+  </div>
+);
+
+// ── COACH APP ─────────────────────────────────────────────────────────────────
+const CoachApp=({user,onLogout})=>{
+  const [page,setPage]=useState('dashboard');
+  const [selectedStudent,setSelectedStudent]=useState(null);
+  const [showPostSession,setShowPostSession]=useState(false);
+  const links=[['dashboard','Dashboard','⊞'],['students','My Students','👥'],['schedule','My Schedule','📅'],['library','Curriculum Library','📚'],['messages','Messages','💬']];
+
+  const render=()=>{
+    if(showPostSession) return <PostSessionForm student={selectedStudent} onBack={()=>setShowPostSession(false)}/>;
+    if(selectedStudent&&page==='students') return <StudentDetailCoach student={selectedStudent} onBack={()=>setSelectedStudent(null)} onPostSession={()=>setShowPostSession(true)}/>;
+    if(page==='dashboard') return <CoachDashboard onSelectStudent={(s)=>{setSelectedStudent(s);setPage('students');}}/>;
+    if(page==='students') return <CoachStudents onSelect={(s)=>{setSelectedStudent(s);}}/>;
+    if(page==='schedule') return <CoachSchedule/>;
+    if(page==='library') return <CoachLibrary/>;
+    if(page==='messages') return <CoachMessages/>;
+    if(page==='settings') return <SettingsPage user={user}/>;
+    return <CoachDashboard/>;
+  };
+
+  return <div style={{display:'flex',background:'var(--bg)',minHeight:'100vh'}}>
+    <Sidebar user={{...user,type:'Coach',bg:'#DC2626'}} page={page} setPage={(p)=>{setSelectedStudent(null);setShowPostSession(false);setPage(p);}} links={links} onLogout={onLogout}/>
+    <div style={{flex:1,marginLeft:240,display:'flex',flexDirection:'column'}}>
+      <TopBar title={showPostSession?'Post-Session Form':selectedStudent?selectedStudent.name:links.find(l=>l[0]===page)?.[1]||'Settings'}
+        actions={selectedStudent&&!showPostSession&&page==='students'?[<button key="ps" className="btn btn-primary btn-sm" onClick={()=>setShowPostSession(true)}>Submit Session Notes</button>]:null}/>
+      <div style={{flex:1,padding:28,maxWidth:1100}}>{render()}</div>
+    </div>
+  </div>;
+};
+
+const CoachDashboard=({onSelectStudent})=>(
+  <div>
+    <div style={{marginBottom:24}}><h2 style={{fontSize:24,fontWeight:800}}>Good morning, Ahriyen</h2><p style={{fontSize:14,color:'var(--text2)',marginTop:4}}>3 active students · 2 sessions today</p></div>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:24}}>
+      {[['3','Active Students','var(--blue)'],['2','Sessions Today','var(--orange)'],['1','Competition Soon','var(--red)'],['0','Pending Notes','var(--green)']].map(([val,label,color])=>(
+        <div key={label} className="card" style={{borderTop:`3px solid ${color}`}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}}>{label}</div>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:36,fontWeight:800,color,lineHeight:1}}>{val}</div>
+        </div>
+      ))}
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'2fr 1fr',gap:16}}>
+      <div>
+        <div style={{fontWeight:700,marginBottom:12}}>Today's Sessions</div>
+        {[{time:'3:00 PM',student:'Alex Chen',topic:'path.jerryio.com + Override Autonomous Planning',module:2,session:4},{time:'5:00 PM',student:'Sam Rivera',topic:'First Override Autonomous — Write + Test',module:3,session:3}].map((s,i)=>(
+          <div key={i} className="card" style={{marginBottom:10,display:'flex',gap:16,alignItems:'center'}}>
+            <div style={{fontSize:24,fontWeight:800,fontFamily:"'Bricolage Grotesque',sans-serif",color:'var(--blue)',minWidth:60}}>{s.time}</div>
+            <div style={{flex:1}}>
+              <div style={{fontWeight:700,marginBottom:2}}>{s.student}</div>
+              <div style={{fontSize:13,color:'var(--text2)'}}>{s.topic}</div>
+              <div style={{fontSize:12,color:'var(--text3)',marginTop:2}}>Module {s.module} · Session {s.session}</div>
+            </div>
+            <button className="btn btn-primary btn-sm">Start Session</button>
+          </div>
+        ))}
+      </div>
+      <div>
+        <div style={{fontWeight:700,marginBottom:12}}>Alerts</div>
+        <div className="alert alert-orange" style={{marginBottom:10}}><span>🏆</span><div><strong>Alex Chen</strong> — Competition in {Math.max(0,Math.ceil((new Date('Nov 8, 2026')-new Date())/(86400000)))} days (Nov 8)</div></div>
+        <div className="alert alert-blue" style={{marginBottom:10}}><span>💡</span><div><strong>Sam Rivera</strong> is ahead of schedule — consider introducing multi-path autonomous early</div></div>
+        <div className="alert alert-green"><span>✓</span><div>Jordan Lee — On track. No action needed.</div></div>
+      </div>
+    </div>
+  </div>
+);
+
+const CoachStudents=({onSelect})=>(
+  <div>
+    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20}}>
+      <div><h2 style={{fontSize:22,fontWeight:800}}>My Students</h2><p style={{fontSize:14,color:'var(--text2)'}}>3 active</p></div>
+    </div>
+    <div style={{display:'flex',flexDirection:'column',gap:10}}>
+      {STUDENTS.map(s=>(
+        <div key={s.id} className="card" style={{cursor:'pointer',display:'flex',gap:16,alignItems:'center'}} onClick={()=>onSelect(s)}
+          onMouseOver={e=>e.currentTarget.style.borderColor='var(--blue-light)'}
+          onMouseOut={e=>e.currentTarget.style.borderColor='var(--border)'}>
+          <Avatar name={s.name} size={44} bg={s.id==='sam'?'#7C3AED':s.id==='jordan'?'#0891B2':'var(--blue)'}/>
+          <div style={{flex:1}}>
+            <div style={{display:'flex',gap:8,alignItems:'center',marginBottom:4}}>
+              <span style={{fontWeight:700,fontSize:15}}>{s.name}</span>
+              <StatusBadge s={s.status}/>
+              {s.competition&&<span className="badge badge-orange">🏆 Competition {s.competition}</span>}
+            </div>
+            <div style={{fontSize:13,color:'var(--text2)',marginBottom:8}}>Module {s.module} · Session {s.session} · {s.track}</div>
+            <div className="progress-bar" style={{maxWidth:300}}><div className="progress-fill" style={{width:`${Math.round((s.session/8)*100)}%`,background:s.status==='ahead'?'var(--blue)':s.status==='behind'?'var(--red)':'var(--green)'}}/></div>
+          </div>
+          <div style={{textAlign:'right',fontSize:12,color:'var(--text3)'}}>Last active<br/>{s.id==='jordan'?'3 days ago':'Today'}</div>
+          <span style={{color:'var(--text3)',fontSize:18}}>›</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const StudentDetailCoach=({student,onBack,onPostSession})=>{
+  const [tab,setTab]=useState('overview');
+  const history=SESSIONS_HISTORY.filter(s=>s.studentId===student.id);
+  const tabs=[['overview','Overview'],['sessions','Session History'],['curriculum','Curriculum'],['portfolio','Portfolio'],['notes','Private Notes']];
+  return <div>
+    <button className="btn btn-ghost btn-sm" style={{marginBottom:20}} onClick={onBack}>← My Students</button>
+    <div className="card" style={{marginBottom:16}}>
+      <div style={{display:'flex',gap:16,alignItems:'center',marginBottom:12}}>
+        <Avatar name={student.name} size={52} bg={student.id==='sam'?'#7C3AED':student.id==='jordan'?'#0891B2':'var(--blue)'}/>
+        <div>
+          <div style={{fontWeight:800,fontSize:20,fontFamily:"'Bricolage Grotesque',sans-serif"}}>{student.name}</div>
+          <div style={{fontSize:14,color:'var(--text2)'}}>{student.track} · Grade {student.grade} · {student.email}</div>
+          <div style={{display:'flex',gap:8,marginTop:6}}><StatusBadge s={student.status}/>{student.competition&&<span className="badge badge-orange">🏆 {student.competition}</span>}</div>
+        </div>
+        <div style={{marginLeft:'auto'}}><button className="btn btn-primary" onClick={onPostSession}>Submit Session Notes</button></div>
+      </div>
+    </div>
+    <div style={{display:'flex',gap:4,background:'var(--bg)',padding:4,borderRadius:10,marginBottom:20,width:'fit-content'}}>
+      {tabs.map(([id,label])=><button key={id} className={`tab${tab===id?' active':''}`} onClick={()=>setTab(id)}>{label}</button>)}
+    </div>
+    {tab==='overview'&&<div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:12}}>Student Info</div>
+        {[['Track',student.track],['Grade',student.grade],['Email',student.email],['Current Module','Module '+student.module],['Current Session','Session '+student.session+' of 8'],['Competition',student.competition||'None set'],['GitHub Commits',student.githubCommits],['Notebook Pages',student.notebookPages]].map(([k,v])=>(
+          <div key={k} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--border)',fontSize:13}}><span style={{color:'var(--text2)'}}>{k}</span><span style={{fontWeight:500}}>{v}</span></div>
+        ))}
+      </div>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:12}}>Competition Readiness</div>
+        <div style={{textAlign:'center',marginBottom:16}}>
+          <ProgressRing pct={student.id==='alex'?62:student.id==='sam'?81:24} size={80} stroke={7} color={student.status==='ahead'?'var(--blue)':student.status==='behind'?'var(--red)':'var(--green)'}/>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:28,fontWeight:800,marginTop:8}}>{student.id==='alex'?'62':student.id==='sam'?'81':'24'}%</div>
+        </div>
+        <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+          {student.skillsEarned.map(s=><span key={s} className="skill-badge earned">{s}</span>)}
+        </div>
+      </div>
+    </div>}
+    {tab==='sessions'&&<div>{history.length?history.map(s=><div key={s.id} className="card" style={{marginBottom:10}}>
+      <div style={{fontWeight:700,marginBottom:4}}>{s.topic}</div>
+      <div style={{fontSize:12,color:'var(--text3)',marginBottom:8}}>{s.date} · {s.duration} min · Exit standard: {s.exitMet?'Met ✓':'Not met'}</div>
+      <p style={{fontSize:13,color:'var(--text2)',lineHeight:1.7}}>{s.coachNotes}</p>
+    </div>):<div style={{textAlign:'center',padding:40,color:'var(--text3)'}}>No sessions logged yet.</div>}</div>}
+    {tab==='curriculum'&&<StudentCurriculum student={student}/>}
+    {tab==='portfolio'&&<StudentPortfolio student={student}/>}
+    {tab==='notes'&&<div className="card"><div style={{fontWeight:700,marginBottom:12}}>Private Coach Notes</div><textarea rows={8} placeholder="These notes are only visible to you and admins. Log patterns, concerns, coaching adjustments..."/><button className="btn btn-primary btn-sm" style={{marginTop:10}}>Save Notes</button></div>}
+  </div>;
+};
+
+const PostSessionForm=({student,onBack})=>{
+  const [submitted,setSubmitted]=useState(false);
+  const [form,setForm]=useState({covered:'',exitMet:'yes',remediation:'',coachNotes:'',challenge:'',parentSummary:'',adjustment:false,adjustNote:''});
+  const s=student||STUDENTS[0];
+  if(submitted) return <div style={{textAlign:'center',padding:'60px 0'}}>
+    <div style={{fontSize:52,marginBottom:16}}>✅</div>
+    <h2 style={{fontSize:24,fontWeight:800,marginBottom:8}}>Session Submitted</h2>
+    <p style={{fontSize:15,color:'var(--text2)',marginBottom:8}}>Session marked complete in {s.name}'s curriculum.</p>
+    <p style={{fontSize:14,color:'var(--green)',marginBottom:24}}>✓ Parent summary sent to {s.email.replace('sam','parent'||'student'||'')||'parent@email.com'}</p>
+    <button className="btn btn-ghost" onClick={onBack}>← Back to Student</button>
+  </div>;
+  return <div style={{maxWidth:720}}>
+    <div style={{marginBottom:24}}>
+      <h2 style={{fontSize:22,fontWeight:800}}>Post-Session Notes</h2>
+      <p style={{fontSize:14,color:'var(--text2)',marginTop:4}}>{s.name} · Module {s.module} · Session {s.session} — path.jerryio.com + Override Autonomous Planning</p>
+    </div>
+    <div className="form-grid">
+      <div><label>What was actually covered today</label><textarea rows={3} value={form.covered} onChange={e=>setForm({...form,covered:e.target.value})} placeholder="What you covered today — can differ from the session plan. Be specific."/></div>
+      <div>
+        <label>Did the student meet the exit standard?</label>
+        <div style={{display:'flex',gap:10,marginTop:4}}>
+          {[['yes','Yes — fully met'],['partial','Partially met'],['no','Not met']].map(([val,label])=>(
+            <button key={val} onClick={()=>setForm({...form,exitMet:val})} className="btn btn-sm" style={{flex:1,background:form.exitMet===val?(val==='yes'?'var(--green)':val==='partial'?'var(--orange)':'var(--red)'):'var(--white)',color:form.exitMet===val?'#fff':'var(--text)',border:'1.5px solid',borderColor:form.exitMet===val?(val==='yes'?'var(--green)':val==='partial'?'var(--orange)':'var(--red)'):'var(--border)'}}>{label}</button>
+          ))}
+        </div>
+      </div>
+      {form.exitMet!=='yes'&&<div><label>Remediation Plan</label><input value={form.remediation} onChange={e=>setForm({...form,remediation:e.target.value})} placeholder="What will you cover again or differently next session?"/></div>}
+      <div><label>Coach Notes to Student</label><textarea rows={3} value={form.coachNotes} onChange={e=>setForm({...form,coachNotes:e.target.value})} placeholder="Specific, technical feedback for the student. They will read this."/></div>
+      <div><label>Practice Challenge for Next Session</label><input value={form.challenge} onChange={e=>setForm({...form,challenge:e.target.value})} placeholder="One specific task, 10–15 min, clear and actionable."/></div>
+      <div>
+        <label>Parent Summary <span style={{color:'var(--text3)',textTransform:'none',fontSize:10,letterSpacing:0}}>(sent automatically on submit — minimum 150 characters)</span></label>
+        <textarea rows={4} value={form.parentSummary} onChange={e=>setForm({...form,parentSummary:e.target.value})} placeholder="What the parent needs to know: what was covered, what went well, what to watch for, and what comes next. Be warm and specific."/>
+        {form.parentSummary.length>0&&form.parentSummary.length<150&&<div style={{fontSize:12,color:'var(--orange)',marginTop:4}}>{150-form.parentSummary.length} more characters for minimum — be more specific.</div>}
+      </div>
+      <div style={{display:'flex',alignItems:'center',gap:10}}>
+        <input type="checkbox" id="adj" checked={form.adjustment} onChange={e=>setForm({...form,adjustment:e.target.checked})} style={{width:auto}}/>
+        <label htmlFor="adj" style={{textTransform:'none',fontSize:14,fontWeight:500,letterSpacing:0,marginBottom:0}}>Flag a curriculum adjustment request to admin</label>
+      </div>
+      {form.adjustment&&<div><textarea rows={2} value={form.adjustNote} onChange={e=>setForm({...form,adjustNote:e.target.value})} placeholder="What adjustment and why?"/></div>}
+      <div style={{background:'var(--orange-dim)',border:'1px solid var(--orange-border)',borderRadius:8,padding:12,fontSize:13,color:'#9A3412'}}>
+        ⚠️ Submitting will: mark this session complete in {s.name}'s curriculum, send the parent summary via email, and unlock the session recap for {s.name}.
+      </div>
+      <button className="btn btn-primary btn-lg" onClick={()=>form.parentSummary.length>=150&&setSubmitted(true)} style={{opacity:form.parentSummary.length>=150?1:.5}}>Submit + Send Parent Summary</button>
+    </div>
+  </div>;
+};
+
+const CoachSchedule=()=>(
+  <div>
+    <div style={{fontWeight:700,marginBottom:20}}>This Week</div>
+    {[['Monday','Nov 4'],['Tuesday','Nov 5'],['Wednesday','Nov 6'],['Thursday','Nov 7'],['Friday','Nov 8'],['Saturday','Nov 9']].map(([day,date])=>(
+      <div key={day} style={{display:'flex',gap:16,marginBottom:12,alignItems:'flex-start'}}>
+        <div style={{width:100,flexShrink:0,textAlign:'right',paddingTop:12}}>
+          <div style={{fontWeight:700,fontSize:13}}>{day}</div>
+          <div style={{fontSize:12,color:'var(--text3)'}}>{date}</div>
+        </div>
+        <div style={{flex:1,background:'var(--bg)',borderRadius:10,minHeight:52,padding:8,display:'flex',gap:8,flexWrap:'wrap'}}>
+          {day==='Monday'&&[{time:'3:00 PM',student:'Alex Chen',topic:'Autonomous Planning',color:'var(--blue)'},{time:'5:00 PM',student:'Sam Rivera',topic:'First Autonomous',color:'#7C3AED'}].map((s,i)=>(
+            <div key={i} style={{background:'var(--white)',border:`2px solid ${s.color}`,borderRadius:8,padding:'8px 12px',display:'flex',gap:8,alignItems:'center'}}>
+              <div style={{width:4,height:32,background:s.color,borderRadius:2}}/>
+              <div><div style={{fontSize:12,fontWeight:700}}>{s.time} · {s.student}</div><div style={{fontSize:11,color:'var(--text2)'}}>{s.topic}</div></div>
+            </div>
+          ))}
+          {day==='Thursday'&&<div style={{background:'var(--white)',border:'2px solid var(--orange)',borderRadius:8,padding:'8px 12px',display:'flex',gap:8,alignItems:'center'}}><div style={{width:4,height:32,background:'var(--orange)',borderRadius:2}}/><div><div style={{fontSize:12,fontWeight:700}}>4:30 PM · Jordan Lee</div><div style={{fontSize:11,color:'var(--text2)'}}>Sensor Code + If/Else</div></div></div>}
+          {day!=='Monday'&&day!=='Thursday'&&<div style={{padding:'12px',fontSize:13,color:'var(--text3)'}}>No sessions</div>}
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+const CoachLibrary=()=>{
+  const [selected,setSelected]=useState(null);
+  if(selected) return <div><button className="btn btn-ghost btn-sm" style={{marginBottom:20}} onClick={()=>setSelected(null)}>← Library</button>
+    <div className="card">
+      <div className="badge badge-blue" style={{marginBottom:12}}>Session {selected.num}</div>
+      <h2 style={{fontSize:22,fontWeight:800,marginBottom:8}}>{selected.title}</h2>
+      <div style={{fontSize:14,color:'var(--text2)',marginBottom:16}}>{selected.format} · {selected.duration}</div>
+      <div style={{background:'var(--orange-dim)',border:'1px solid var(--orange-border)',borderRadius:8,padding:14,marginBottom:16}}>
+        <div style={{fontSize:11,fontWeight:700,color:'#9A3412',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:6}}>Exit Standard</div>
+        <div style={{fontSize:14,color:'#7C2D12',fontWeight:500}}>{selected.exitStd}</div>
+      </div>
+      <div className="card" style={{background:'var(--bg)',marginBottom:12}}>
+        <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:10}}>Session Plan (15-min blocks)</div>
+        {[['0–5 min','Review last session — student explains key concepts back to coach'],['5–15 min','Coach introduces the new concept with a specific example'],['15–45 min','Guided practice — student works with coach real-time feedback every few minutes'],['45–65 min','Independent work — student continues without coach prompting'],['65–75 min','Debrief — what did student accomplish? What to practice before next session?']].map(([time,activity])=>(
+          <div key={time} style={{display:'flex',gap:12,marginBottom:8,fontSize:13}}><span style={{fontWeight:700,color:'var(--blue)',minWidth:80,flexShrink:0}}>{time}</span><span style={{color:'var(--text2)'}}>{activity}</span></div>
+        ))}
+      </div>
+    </div>
+  </div>;
+  return <div>
+    <div style={{display:'flex',gap:8,marginBottom:20,flexWrap:'wrap'}}>
+      {MODULES.slice(0,3).map(m=><button key={m.num} className="module-tab active" style={{background:m.num===1?'var(--blue)':'var(--bg)',color:m.num===1?'#fff':'var(--text2)'}}>M{m.num}</button>)}
+    </div>
+    <div style={{display:'flex',flexDirection:'column',gap:8}}>
+      {MODULE1_SESSIONS.map((s,i)=>(
+        <div key={i} className="session-row" onClick={()=>setSelected(s)}>
+          <div style={{width:36,height:36,borderRadius:8,background:'var(--blue-dim)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:700,color:'var(--blue)',flexShrink:0}}>{s.num}</div>
+          <div style={{flex:1}}><div style={{fontWeight:600,fontSize:14}}>{s.title}</div><div style={{fontSize:12,color:'var(--text3)'}}>{s.duration} · {s.format}</div></div>
+          <span style={{color:'var(--text3)',fontSize:14}}>›</span>
+        </div>
+      ))}
+    </div>
+  </div>;
+};
+
+const CoachMessages=()=>(
+  <div style={{maxWidth:640}}>
+    {STUDENTS.map(s=>(
+      <div key={s.id} className="card" style={{marginBottom:10,cursor:'pointer',display:'flex',gap:12,alignItems:'center'}}
+        onMouseOver={e=>e.currentTarget.style.borderColor='var(--blue-light)'}
+        onMouseOut={e=>e.currentTarget.style.borderColor='var(--border)'}>
+        <Avatar name={s.name} size={40} bg={s.id==='sam'?'#7C3AED':s.id==='jordan'?'#0891B2':'var(--blue)'}/>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:700,fontSize:14}}>{s.name}</div>
+          <div style={{fontSize:13,color:'var(--text2)'}}>Does the preload count toward the 7-pin target?</div>
+        </div>
+        <div style={{fontSize:12,color:'var(--text3)'}}>Nov 3</div>
+      </div>
+    ))}
+  </div>
+);
+
+// ── ADMIN APP ─────────────────────────────────────────────────────────────────
+const AdminApp=({user,onLogout})=>{
+  const [page,setPage]=useState('dashboard');
+  const links=[['dashboard','Dashboard','⊞'],['students','Students','👥'],['coaches','Coaches','🎓'],['booking','Bookings','📋'],['billing','Billing','💳'],['analytics','Analytics','📊']];
+  const render=()=>{
+    if(page==='dashboard') return <AdminDashboard/>;
+    if(page==='students') return <AdminStudents/>;
+    if(page==='coaches') return <AdminCoaches/>;
+    if(page==='billing') return <AdminBilling/>;
+    if(page==='analytics') return <AdminAnalytics/>;
+    if(page==='settings') return <SettingsPage user={user}/>;
+    return <AdminDashboard/>;
+  };
+  return <div style={{display:'flex',background:'var(--bg)',minHeight:'100vh'}}>
+    <Sidebar user={{...user,type:'Admin',bg:'#9333EA'}} page={page} setPage={setPage} links={links} onLogout={onLogout}/>
+    <div style={{flex:1,marginLeft:240,display:'flex',flexDirection:'column'}}>
+      <TopBar title={links.find(l=>l[0]===page)?.[1]||'Settings'}/>
+      <div style={{flex:1,padding:28,maxWidth:1200}}>{render()}</div>
+    </div>
+  </div>;
+};
+
+const AdminDashboard=()=>(
+  <div>
+    <div style={{marginBottom:24}}><h2 style={{fontSize:24,fontWeight:800}}>Platform Overview</h2><p style={{fontSize:14,color:'var(--text2)',marginTop:4}}>Spark Academy · Active season</p></div>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:24}}>
+      {[['3','Active Students','var(--blue)'],['1','Active Coaches','var(--green)'],['$1,100','MRR','var(--orange)'],['62%','Avg Readiness','#7C3AED)']].map(([val,label,color])=>(
+        <div key={label} className="card" style={{borderTop:`3px solid ${color}`}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}}>{label}</div>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:36,fontWeight:800,color,lineHeight:1}}>{val}</div>
+        </div>
+      ))}
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'2fr 1fr',gap:16}}>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:16}}>Recent Activity</div>
+        {[['Session completed','Alex Chen · path.jerryio.com + Autonomous Planning','2 hours ago','var(--green)'],['Parent summary sent','Alex\'s parent · session recap email','2 hours ago','var(--blue)'],['New booking request','Maya Torres · Grade 9 · Starter level','Yesterday','var(--orange)'],['Session completed','Sam Rivera · LemLib Chassis Config','Yesterday','var(--green)']].map(([type,detail,time,color])=>(
+          <div key={detail} style={{display:'flex',gap:12,alignItems:'flex-start',marginBottom:14,paddingBottom:14,borderBottom:'1px solid var(--border)'}}>
+            <div style={{width:8,height:8,borderRadius:'50%',background:color,marginTop:5,flexShrink:0}}/>
+            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{type}</div><div style={{fontSize:12,color:'var(--text2)'}}>{detail}</div></div>
+            <div style={{fontSize:11,color:'var(--text3)',flexShrink:0}}>{time}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:12}}>
+        <div className="alert alert-orange"><span>📋</span><div><strong>1 new booking request</strong> — Maya Torres awaiting coach assignment</div></div>
+        <div className="alert alert-blue"><span>💳</span><div>All packages current. No renewals due this week.</div></div>
+        <div className="card">
+          <div style={{fontWeight:700,marginBottom:10}}>Sessions This Week</div>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:40,fontWeight:800,color:'var(--blue)'}}>3</div>
+          <div style={{fontSize:13,color:'var(--text2)'}}>of 6 available coach slots</div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const AdminStudents=()=>(
+  <div>
+    <div style={{display:'flex',justifyContent:'space-between',marginBottom:20}}>
+      <div><h2 style={{fontSize:22,fontWeight:800}}>All Students</h2><p style={{fontSize:14,color:'var(--text2)'}}>3 active · 0 paused · 1 pending intake</p></div>
+      <button className="btn btn-primary btn-sm">+ Enroll Student</button>
+    </div>
+    <div className="card" style={{marginBottom:16,display:'flex',gap:10}}>
+      <input placeholder="Search by name, email, module..." style={{flex:1}}/>
+      <select style={{width:'auto'}}><option>All Coaches</option><option>Ahriyen Kamran</option></select>
+      <select style={{width:'auto'}}><option>All Statuses</option><option>Active</option><option>Trial</option></select>
+    </div>
+    <table style={{width:'100%',borderCollapse:'collapse'}}>
+      <thead><tr style={{borderBottom:'2px solid var(--border)'}}>{['Name','Track','Module','Coach','Status','Competition','Actions'].map(h=><th key={h} style={{textAlign:'left',padding:'10px 12px',fontSize:11,color:'var(--text3)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.5px'}}>{h}</th>)}</tr></thead>
+      <tbody>{STUDENTS.map(s=>(
+        <tr key={s.id} style={{borderBottom:'1px solid var(--border)'}} onMouseOver={e=>e.currentTarget.style.background='var(--bg)'} onMouseOut={e=>e.currentTarget.style.background=''}>
+          <td style={{padding:'12px'}}><div style={{display:'flex',gap:10,alignItems:'center'}}><Avatar name={s.name} size={32} bg={s.id==='sam'?'#7C3AED':s.id==='jordan'?'#0891B2':'var(--blue)'}/><div><div style={{fontWeight:600,fontSize:14}}>{s.name}</div><div style={{fontSize:12,color:'var(--text3)'}}>{s.email}</div></div></div></td>
+          <td style={{padding:'12px',fontSize:13}}><span className="badge badge-navy">{s.track}</span></td>
+          <td style={{padding:'12px',fontSize:13}}>M{s.module} / S{s.session}</td>
+          <td style={{padding:'12px',fontSize:13}}>Ahriyen K.</td>
+          <td style={{padding:'12px'}}><StatusBadge s={s.status}/></td>
+          <td style={{padding:'12px',fontSize:13,color:'var(--text2)'}}>{s.competition||'—'}</td>
+          <td style={{padding:'12px'}}><div style={{display:'flex',gap:6}}><button className="btn btn-ghost btn-sm">View</button><button className="btn btn-ghost btn-sm">Reassign</button></div></td>
+        </tr>
+      ))}</tbody>
+    </table>
+  </div>
+);
+
+const AdminCoaches=()=>(
+  <div>
+    <div style={{display:'flex',justifyContent:'space-between',marginBottom:20}}>
+      <div><h2 style={{fontSize:22,fontWeight:800}}>Coaches</h2><p style={{fontSize:14,color:'var(--text2)'}}>1 active coach</p></div>
+      <button className="btn btn-primary btn-sm">+ Onboard Coach</button>
+    </div>
+    <div className="card">
+      <div style={{display:'flex',gap:16,alignItems:'center'}}>
+        <Avatar name="Ahriyen Kamran" size={52} bg='#DC2626'/>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:700,fontSize:17}}>Ahriyen Kamran</div>
+          <div style={{fontSize:13,color:'var(--text2)'}}>Head Coach · 3 active students</div>
+          <div style={{display:'flex',gap:8,marginTop:8}}>
+            {[['Utilization','50%','var(--blue)'],['Completion Rate','100%','var(--green)'],['Avg Notes Turnaround','2h','var(--orange)']].map(([k,v,color])=>(
+              <div key={k} style={{background:'var(--bg)',borderRadius:8,padding:'6px 12px',textAlign:'center'}}>
+                <div style={{fontSize:16,fontWeight:800,color,fontFamily:"'Bricolage Grotesque',sans-serif"}}>{v}</div>
+                <div style={{fontSize:10,color:'var(--text3)'}}>{k}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{display:'flex',gap:8}}><button className="btn btn-ghost btn-sm">View</button><button className="btn btn-ghost btn-sm">Adjust Schedule</button></div>
+      </div>
+    </div>
+  </div>
+);
+
+const AdminBilling=()=>(
+  <div>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:24}}>
+      {[['$1,100','MRR','var(--blue)'],['$1,100','This Month','var(--green)'],['3','Active Packages','var(--orange)'],['0','Expiring Soon','var(--text3)']].map(([val,label,color])=>(
+        <div key={label} className="card" style={{borderTop:`3px solid ${color}`}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}}>{label}</div>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:32,fontWeight:800,color,lineHeight:1}}>{val}</div>
+        </div>
+      ))}
+    </div>
+    <div className="card">
+      <div style={{fontWeight:700,marginBottom:16}}>All Transactions</div>
+      <table style={{width:'100%',borderCollapse:'collapse',fontSize:13}}>
+        <thead><tr style={{borderBottom:'2px solid var(--border)'}}>{['Date','Student','Package','Amount','Status'].map(h=><th key={h} style={{textAlign:'left',padding:'8px 10px',fontSize:11,color:'var(--text3)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.5px'}}>{h}</th>)}</tr></thead>
+        <tbody>{[['Sep 1, 2026','Alex Chen','Competition Ready','$1,100','paid'],['Sep 1, 2026','Sam Rivera','Season Full','$1,500','paid'],['Sep 8, 2026','Jordan Lee','Foundation Pack','$520','paid']].map(([date,student,pkg,amount,status],i)=>(
+          <tr key={i} style={{borderBottom:'1px solid var(--border)'}}><td style={{padding:'10px'}}>{date}</td><td style={{padding:'10px',fontWeight:600}}>{student}</td><td style={{padding:'10px',color:'var(--text2)'}}>{pkg}</td><td style={{padding:'10px',fontWeight:700}}>{amount}</td><td style={{padding:'10px'}}><span className="badge badge-green">{status}</span></td></tr>
+        ))}</tbody>
+      </table>
+    </div>
+  </div>
+);
+
+const AdminAnalytics=()=>(
+  <div>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:24}}>
+      {[['100%','Intake Conversion','var(--blue)'],['0%','30-Day Churn','var(--green)'],['92%','Session Completion','var(--orange)']].map(([val,label,color])=>(
+        <div key={label} className="card" style={{borderTop:`3px solid ${color}`}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}}>{label}</div>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:44,fontWeight:800,color,lineHeight:1}}>{val}</div>
+        </div>
+      ))}
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:16}}>Student Progress Distribution</div>
+        {[['Module 1 — Foundations',1,3],['Module 2 — Building',1,3],['Module 3 — Programming',1,3]].map(([label,count,total])=>(
+          <div key={label} style={{marginBottom:12}}>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:13,marginBottom:5}}><span style={{color:'var(--text2)'}}>{label}</span><span style={{fontWeight:600}}>{count} student</span></div>
+            <div className="progress-bar"><div className="progress-fill" style={{width:`${Math.round((count/total)*100)}%`,background:'var(--blue)'}}/></div>
+          </div>
+        ))}
+      </div>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:16}}>Coach Utilization</div>
+        <div style={{textAlign:'center',marginBottom:12}}>
+          <ProgressRing pct={50} size={80} stroke={8} color="var(--blue)"/>
+          <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:28,fontWeight:800,marginTop:8}}>50%</div>
+          <div style={{fontSize:13,color:'var(--text2)'}}>of available slots booked</div>
+        </div>
+        <div style={{fontSize:13,color:'var(--text2)',textAlign:'center'}}>3 of 6 weekly slots filled — room to onboard 2–3 more students</div>
+      </div>
+    </div>
+  </div>
+);
+
+const SettingsPage=({user})=>(
+  <div style={{maxWidth:560}}>
+    <div className="form-grid">
+      <div><label>Display Name</label><input defaultValue={user.name}/></div>
+      <div><label>Email</label><input defaultValue={user.id+('@sparkacdemy.co')}/></div>
+      <div><label>New Password</label><input type="password" placeholder="Leave blank to keep current password"/></div>
+      <div style={{borderTop:'1px solid var(--border)',paddingTop:16}}>
+        <div style={{fontWeight:700,marginBottom:12}}>Notification Preferences</div>
+        {['Session reminders (4 days before)','Session reminders (1 day before)','Practice challenge reminders','New messages','Package status updates'].map(pref=>(
+          <div key={pref} style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10,fontSize:14}}>
+            <span style={{color:'var(--text2)'}}>{pref}</span>
+            <div style={{width:40,height:22,borderRadius:11,background:'var(--blue)',cursor:'pointer',position:'relative'}}>
+              <div style={{width:18,height:18,borderRadius:'50%',background:'#fff',position:'absolute',right:2,top:2}}/>
+            </div>
+          </div>
+        ))}
+      </div>
+      <button className="btn btn-primary">Save Changes</button>
+    </div>
+  </div>
+);
+
+// ── ROOT APP ──────────────────────────────────────────────────────────────────
+const App=()=>{
+  const [view,setView]=useState('public');
+  const [user,setUser]=useState(null);
+
+  const handleLogin=(account)=>{
+    setUser(account);
+    if(account.type==='student') setView('student');
+    else if(account.type==='parent') setView('parent');
+    else if(account.type==='coach') setView('coach');
+    else if(account.type==='admin') setView('admin');
+  };
+
+  const handleLogout=()=>{setUser(null);setView('public');};
+
+  if(view==='public') return <PublicSite onLogin={()=>setView('login')}/>;
+  if(view==='login') return <LoginPage onLogin={handleLogin} onBack={()=>setView('public')}/>;
+  if(view==='student') return <StudentApp user={user} onLogout={handleLogout}/>;
+  if(view==='parent') return <ParentApp user={user} onLogout={handleLogout}/>;
+  if(view==='coach') return <CoachApp user={user} onLogout={handleLogout}/>;
+  if(view==='admin') return <AdminApp user={user} onLogout={handleLogout}/>;
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
