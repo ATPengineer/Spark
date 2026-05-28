@@ -541,39 +541,92 @@ const PublicSite=({onLogin})=>{
 
 // ── LOGIN ─────────────────────────────────────────────────────────────────────
 const ACCOUNTS=[
-  {id:'alex',type:'student',name:'Alex Chen',sub:'Student · Module 2 · Competition Ready',avatar:'AC',bg:'#2563EB'},
-  {id:'sam',type:'student',name:'Sam Rivera',sub:'Student · Module 3 · PROS+LemLib',avatar:'SR',bg:'#7C3AED'},
-  {id:'jordan',type:'student',name:'Jordan Lee',sub:'Student · Module 1 · Foundations',avatar:'JL',bg:'#0891B2'},
-  {id:'parent_alex',type:'parent',name:'Alex\'s Parent',sub:'Parent Account · Alex Chen',avatar:'AP',bg:'#059669'},
-  {id:'ahriyen',type:'coach',name:'Ahriyen Kamran',sub:'Coach · 3 Active Students',avatar:'AK',bg:'#DC2626'},
-  {id:'admin',type:'admin',name:'Admin',sub:'Spark Academy Operations',avatar:'AD',bg:'#9333EA'},
+  {id:'alex',       type:'student', name:'Alex Chen',      sub:'Student · Module 2 · Competition Ready', avatar:'AC', bg:'#2563EB', email:'alex@students.spark',    password:'Override26!'},
+  {id:'sam',        type:'student', name:'Sam Rivera',     sub:'Student · Module 3 · PROS+LemLib',       avatar:'SR', bg:'#7C3AED', email:'sam@students.spark',     password:'LemLib26!'},
+  {id:'jordan',     type:'student', name:'Jordan Lee',     sub:'Student · Module 1 · Foundations',       avatar:'JL', bg:'#0891B2', email:'jordan@students.spark',  password:'VEX2026!'},
+  {id:'parent_alex',type:'parent',  name:"Alex's Parent",  sub:'Parent Account · Alex Chen',             avatar:'AP', bg:'#059669', email:'parent@alexchen.com',    password:'Parent26!'},
+  {id:'ahriyen',    type:'coach',   name:'Ahriyen Kamran', sub:'Coach · 3 Active Students',              avatar:'AK', bg:'#DC2626', email:'ahriyen@sparkacdemy.co', password:'Coach2026!'},
+  {id:'admin',      type:'admin',   name:'Admin',          sub:'Spark Academy Operations',               avatar:'AD', bg:'#9333EA', email:'admin@sparkacdemy.co',   password:'Admin2026!'},
 ];
 
 const LoginPage=({onLogin,onBack})=>{
-  const [selected,setSelected]=useState(null);
+  const [email,setEmail]=useState('');
+  const [password,setPassword]=useState('');
+  const [showPw,setShowPw]=useState(false);
+  const [error,setError]=useState('');
+  const [showCreds,setShowCreds]=useState(false);
+
+  const attempt=()=>{
+    const acct=ACCOUNTS.find(a=>a.email.toLowerCase()===email.trim().toLowerCase()&&a.password===password);
+    if(acct){setError('');onLogin(acct);}
+    else setError('Incorrect email or password. Use the credentials panel below.');
+  };
+
+  const CRED_GROUPS=[
+    {label:'Students',color:'#2563EB',accounts:ACCOUNTS.filter(a=>a.type==='student')},
+    {label:'Parent',color:'#059669',accounts:ACCOUNTS.filter(a=>a.type==='parent')},
+    {label:'Coach',color:'#DC2626',accounts:ACCOUNTS.filter(a=>a.type==='coach')},
+    {label:'Admin',color:'#9333EA',accounts:ACCOUNTS.filter(a=>a.type==='admin')},
+  ];
+
+  const fillCreds=(acct)=>{setEmail(acct.email);setPassword(acct.password);setError('');};
+
   return <div style={{minHeight:'100vh',background:'var(--bg)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24}}>
-    <div style={{cursor:'pointer',marginBottom:32,display:'flex',alignItems:'center',gap:8}} onClick={onBack}>
+    <div style={{cursor:'pointer',marginBottom:28,display:'flex',alignItems:'center',gap:8}} onClick={onBack}>
       <div style={{width:36,height:36,background:'var(--blue)',borderRadius:9,display:'flex',alignItems:'center',justifyContent:'center',fontSize:18}}>⚡</div>
       <span style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:20,letterSpacing:'-.3px'}}>Spark Academy</span>
     </div>
-    <div style={{background:'var(--white)',border:'1px solid var(--border)',borderRadius:16,padding:32,width:'100%',maxWidth:440}}>
-      <h2 style={{fontSize:22,fontWeight:800,marginBottom:4}}>Sign In</h2>
-      <p style={{fontSize:14,color:'var(--text2)',marginBottom:24}}>Select a demo account to explore the platform</p>
-      {[['Students',ACCOUNTS.filter(a=>a.type==='student')],['Parent',ACCOUNTS.filter(a=>a.type==='parent')],['Coach',ACCOUNTS.filter(a=>a.type==='coach')],['Admin',ACCOUNTS.filter(a=>a.type==='admin')]].map(([label,accounts])=>(
-        <div key={label} style={{marginBottom:16}}>
-          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',letterSpacing:'1px',textTransform:'uppercase',marginBottom:8}}>{label}</div>
-          {accounts.map(a=>(
-            <div key={a.id} onClick={()=>setSelected(a)} style={{display:'flex',alignItems:'center',gap:12,padding:12,borderRadius:10,border:`2px solid ${selected?.id===a.id?'var(--blue)':'var(--border)'}`,cursor:'pointer',marginBottom:6,background:selected?.id===a.id?'var(--blue-dim)':'transparent',transition:'all .15s'}}>
-              <Avatar name={a.name} size={36} bg={a.bg}/>
-              <div style={{flex:1}}><div style={{fontSize:14,fontWeight:600}}>{a.name}</div><div style={{fontSize:12,color:'var(--text2)'}}>{a.sub}</div></div>
-              {selected?.id===a.id&&<span style={{color:'var(--blue)',fontSize:16,fontWeight:700}}>✓</span>}
-            </div>
-          ))}
+
+    <div style={{display:'grid',gridTemplateColumns:showCreds?'420px 360px':'420px',gap:16,maxWidth:800,width:'100%'}}>
+      {/* LOGIN CARD */}
+      <div style={{background:'var(--white)',border:'1px solid var(--border)',borderRadius:16,padding:32}}>
+        <h2 style={{fontSize:22,fontWeight:800,marginBottom:4}}>Sign In</h2>
+        <p style={{fontSize:14,color:'var(--text2)',marginBottom:24}}>Enter your credentials to access your account.</p>
+        <div style={{marginBottom:14}}>
+          <label>Email</label>
+          <input type="email" value={email} onChange={e=>{setEmail(e.target.value);setError('');}} placeholder="you@sparkacdemy.co" onKeyDown={e=>e.key==='Enter'&&attempt()}/>
         </div>
-      ))}
-      <button className="btn btn-primary btn-lg" style={{width:'100%',marginTop:8,opacity:selected?1:.45}} onClick={()=>selected&&onLogin(selected)}>Sign In {selected?`as ${selected.name.split(' ')[0]}`:''}</button>
+        <div style={{marginBottom:6}}>
+          <label>Password</label>
+          <div style={{position:'relative'}}>
+            <input type={showPw?'text':'password'} value={password} onChange={e=>{setPassword(e.target.value);setError('');}} placeholder="••••••••" onKeyDown={e=>e.key==='Enter'&&attempt()} style={{paddingRight:44}}/>
+            <button onClick={()=>setShowPw(!showPw)} style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',background:'none',border:'none',cursor:'pointer',fontSize:16,color:'var(--text3)',padding:0}}>{showPw?'🙈':'👁'}</button>
+          </div>
+        </div>
+        {error&&<div style={{background:'var(--red-dim)',border:'1px solid #FECACA',borderRadius:8,padding:'10px 14px',fontSize:13,color:'#991B1B',marginBottom:14}}>{error}</div>}
+        <button className="btn btn-primary btn-lg" style={{width:'100%',marginTop:14,opacity:email&&password?1:.5}} onClick={attempt}>Sign In</button>
+        <div style={{marginTop:20,paddingTop:16,borderTop:'1px solid var(--border)',textAlign:'center'}}>
+          <button onClick={()=>setShowCreds(!showCreds)} style={{fontSize:13,color:'var(--blue)',background:'none',border:'none',cursor:'pointer',fontWeight:600}}>
+            {showCreds?'Hide demo credentials ↑':'View demo credentials →'}
+          </button>
+        </div>
+      </div>
+
+      {/* CREDENTIALS PANEL */}
+      {showCreds&&<div style={{background:'var(--navy)',borderRadius:16,padding:24,overflowY:'auto',maxHeight:520}}>
+        <div style={{fontSize:12,fontWeight:700,color:'var(--orange)',letterSpacing:'2px',textTransform:'uppercase',marginBottom:16}}>Demo Credentials</div>
+        {CRED_GROUPS.map(({label,color,accounts})=>(
+          <div key={label} style={{marginBottom:16}}>
+            <div style={{fontSize:10,fontWeight:700,color:'rgba(255,255,255,.35)',letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:8}}>{label}</div>
+            {accounts.map(a=>(
+              <div key={a.id} onClick={()=>fillCreds(a)} style={{background:'rgba(255,255,255,.05)',border:`1px solid rgba(255,255,255,.08)`,borderRadius:10,padding:'10px 12px',marginBottom:6,cursor:'pointer',transition:'all .15s'}}
+                onMouseOver={e=>{e.currentTarget.style.background='rgba(255,255,255,.1)';e.currentTarget.style.borderColor='rgba(255,255,255,.2)';}}
+                onMouseOut={e=>{e.currentTarget.style.background='rgba(255,255,255,.05)';e.currentTarget.style.borderColor='rgba(255,255,255,.08)';}}>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:6}}>
+                  <div style={{width:24,height:24,borderRadius:'50%',background:color+'33',border:`1px solid ${color}55`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:700,color,flexShrink:0}}>{a.avatar[0]}</div>
+                  <span style={{fontSize:13,fontWeight:600,color:'#fff'}}>{a.name}</span>
+                  <span style={{marginLeft:'auto',fontSize:10,color:color,fontWeight:700,background:color+'22',padding:'2px 8px',borderRadius:10}}>{a.type}</span>
+                </div>
+                <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:'rgba(255,255,255,.5)',marginBottom:2}}>{a.email}</div>
+                <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:'rgba(255,255,255,.35)'}}>{a.password}</div>
+                <div style={{fontSize:10,color:color,marginTop:4,fontWeight:600}}>Click to autofill →</div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>}
     </div>
-    <button className="btn btn-ghost btn-sm" style={{marginTop:16}} onClick={onBack}>← Back to site</button>
+    <button className="btn btn-ghost btn-sm" style={{marginTop:20}} onClick={onBack}>← Back to site</button>
   </div>;
 };
 
@@ -1197,29 +1250,283 @@ const PostSessionForm=({student,onBack})=>{
   </div>;
 };
 
-const CoachSchedule=()=>(
-  <div>
-    <div style={{fontWeight:700,marginBottom:20}}>This Week</div>
-    {[['Monday','Nov 4'],['Tuesday','Nov 5'],['Wednesday','Nov 6'],['Thursday','Nov 7'],['Friday','Nov 8'],['Saturday','Nov 9']].map(([day,date])=>(
-      <div key={day} style={{display:'flex',gap:16,marginBottom:12,alignItems:'flex-start'}}>
-        <div style={{width:100,flexShrink:0,textAlign:'right',paddingTop:12}}>
-          <div style={{fontWeight:700,fontSize:13}}>{day}</div>
-          <div style={{fontSize:12,color:'var(--text3)'}}>{date}</div>
-        </div>
-        <div style={{flex:1,background:'var(--bg)',borderRadius:10,minHeight:52,padding:8,display:'flex',gap:8,flexWrap:'wrap'}}>
-          {day==='Monday'&&[{time:'3:00 PM',student:'Alex Chen',topic:'Autonomous Planning',color:'var(--blue)'},{time:'5:00 PM',student:'Sam Rivera',topic:'First Autonomous',color:'#7C3AED'}].map((s,i)=>(
-            <div key={i} style={{background:'var(--white)',border:`2px solid ${s.color}`,borderRadius:8,padding:'8px 12px',display:'flex',gap:8,alignItems:'center'}}>
-              <div style={{width:4,height:32,background:s.color,borderRadius:2}}/>
-              <div><div style={{fontSize:12,fontWeight:700}}>{s.time} · {s.student}</div><div style={{fontSize:11,color:'var(--text2)'}}>{s.topic}</div></div>
+const CALENDAR_SESSIONS=[
+  {id:1,studentId:'alex',  studentName:'Alex Chen',  color:'#2563EB',day:1,startH:15,startM:0, dur:90, topic:'Override Autonomous Path Planning',   module:2,session:4,location:'In-Person'},
+  {id:2,studentId:'sam',   studentName:'Sam Rivera', color:'#7C3AED',day:1,startH:17,startM:0, dur:90, topic:'LemLib Chassis Config + moveToPose',   module:3,session:3,location:'In-Person'},
+  {id:3,studentId:'jordan',studentName:'Jordan Lee', color:'#F97316',day:4,startH:16,startM:30,dur:75, topic:'Sensor Code: IMU + Distance',           module:1,session:6,location:'Virtual'},
+  {id:4,studentId:'alex',  studentName:'Alex Chen',  color:'#2563EB',day:8,startH:15,startM:0, dur:90, topic:'First Override Autonomous — Write+Test',module:2,session:5,location:'In-Person'},
+  {id:5,studentId:'sam',   studentName:'Sam Rivera', color:'#7C3AED',day:8,startH:17,startM:0, dur:90, topic:'Multi-Path Autonomous + Selector',      module:3,session:4,location:'In-Person'},
+  {id:6,studentId:'jordan',studentName:'Jordan Lee', color:'#F97316',day:11,startH:16,startM:30,dur:75,'topic':'If/Else, While Loops + Practice',    module:1,session:7,location:'Virtual'},
+  {id:7,studentId:'alex',  studentName:'Alex Chen',  color:'#2563EB',day:15,startH:15,startM:0, dur:90, topic:'Sensor-Based Autonomous Tuning',       module:2,session:6,location:'In-Person'},
+];
+const COMP_EVENTS=[
+  {day:8, label:'🏆 Alex — Houston Regional',color:'#EF4444'},
+  {day:22,label:'🏆 Sam — Dallas Qualifier',color:'#8B5CF6'},
+];
+const AVAIL_BLOCKS=[
+  {day:1,startH:14,dur:240},{day:2,startH:16,dur:180},{day:4,startH:15,dur:240},{day:5,startH:10,dur:300},
+  {day:8,startH:14,dur:240},{day:9,startH:16,dur:180},{day:11,startH:15,dur:240},{day:15,startH:14,dur:240},
+];
+
+const CoachSchedule=()=>{
+  const [view,setView]=useState('week');
+  const [weekOffset,setWeekOffset]=useState(0);
+  const [selectedSession,setSelectedSession]=useState(null);
+  const [hoveredSession,setHoveredSession]=useState(null);
+
+  const HOURS=[8,9,10,11,12,13,14,15,16,17,18,19,20];
+  const DAYS_SHORT=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // Base Monday = Nov 4 2026 (day index 308 of year)
+  const baseMs=new Date(2026,10,4).getTime();
+  const weekStart=new Date(baseMs+weekOffset*7*86400000);
+  const weekDays=Array.from({length:7},(_,i)=>new Date(weekStart.getTime()+i*86400000));
+
+  // Map session.day (1=Nov4,2=Nov5,...) to actual date for this week
+  const sessionForWeekDay=(dayOfWeek)=>{ // 0=Sun...6=Sat matching weekDays
+    return CALENDAR_SESSIONS.filter(s=>{
+      const sDate=new Date(baseMs+(s.day-1)*86400000);
+      return sDate.toDateString()===weekDays[dayOfWeek].toDateString();
+    });
+  };
+  const compForDay=(d)=>COMP_EVENTS.filter(e=>{
+    const eDate=new Date(baseMs+(e.day-1)*86400000);
+    return eDate.toDateString()===d.toDateString();
+  });
+  const availForDay=(d)=>AVAIL_BLOCKS.filter(b=>{
+    const bDate=new Date(baseMs+(b.day-1)*86400000);
+    return bDate.toDateString()===d.toDateString();
+  });
+
+  const fmtTime=(h,m)=>{const ampm=h>=12?'PM':'AM';const hh=h>12?h-12:h===0?12:h;return `${hh}:${String(m).padStart(2,'0')} ${ampm}`;};
+  const fmtDur=(min)=>min<60?`${min}m`:`${Math.floor(min/60)}h${min%60?` ${min%60}m`:''}`;
+  const isToday=(d)=>d.toDateString()===new Date().toDateString();
+
+  // Week stats
+  const weekSessions=CALENDAR_SESSIONS.filter(s=>{
+    const sd=new Date(baseMs+(s.day-1)*86400000);
+    return sd>=weekDays[0]&&sd<=weekDays[6];
+  });
+  const totalHrs=(weekSessions.reduce((a,s)=>a+s.dur,0)/60).toFixed(1);
+  const bookedSlots=weekSessions.length;
+  const totalSlots=AVAIL_BLOCKS.filter(b=>{
+    const bd=new Date(baseMs+(b.day-1)*86400000);
+    return bd>=weekDays[0]&&bd<=weekDays[6];
+  }).length;
+
+  const monthView=()=>{
+    const year=2026,month=10; // November 2026
+    const firstDay=new Date(year,month,1).getDay();
+    const daysInMonth=30;
+    const cells=[];
+    for(let i=0;i<firstDay;i++) cells.push(null);
+    for(let d=1;d<=daysInMonth;d++) cells.push(d);
+    const sessionsByDay={};
+    CALENDAR_SESSIONS.forEach(s=>{
+      const sd=new Date(baseMs+(s.day-1)*86400000);
+      const k=sd.getDate();
+      if(!sessionsByDay[k]) sessionsByDay[k]=[];
+      sessionsByDay[k].push(s);
+    });
+    const compByDay={};
+    COMP_EVENTS.forEach(e=>{
+      const ed=new Date(baseMs+(e.day-1)*86400000);
+      const k=ed.getDate();
+      if(!compByDay[k]) compByDay[k]=[];
+      compByDay[k].push(e);
+    });
+    return <div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:0}}>
+        {DAYS_SHORT.map(d=><div key={d} style={{padding:'8px 0',textAlign:'center',fontSize:11,fontWeight:700,color:'var(--text3)',letterSpacing:'1px',textTransform:'uppercase',borderBottom:'2px solid var(--border)'}}>{d}</div>)}
+        {cells.map((day,i)=>{
+          const hasSessions=day&&sessionsByDay[day];
+          const hasComp=day&&compByDay[day];
+          const isCurrentDay=day&&new Date(2026,10,day).toDateString()===new Date().toDateString();
+          return <div key={i} style={{minHeight:100,padding:6,border:'1px solid var(--border)',borderTop:'none',borderLeft:i%7===0?'none':'1px solid var(--border)',background:isCurrentDay?'#EFF6FF':'var(--white)',position:'relative'}}>
+            {day&&<div style={{fontWeight:isCurrentDay?800:500,fontSize:13,color:isCurrentDay?'var(--blue)':'var(--text)',marginBottom:4,width:24,height:24,borderRadius:'50%',background:isCurrentDay?'var(--blue)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',color:isCurrentDay?'#fff':'var(--text)'}}>{day}</div>}
+            {hasComp&&compByDay[day].map((e,ei)=><div key={ei} style={{fontSize:10,background:e.color+'15',borderLeft:`2px solid ${e.color}`,padding:'2px 4px',borderRadius:2,marginBottom:3,color:e.color,fontWeight:600,overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}}>{e.label}</div>)}
+            {hasSessions&&sessionsByDay[day].map((s,si)=><div key={si} onClick={()=>setSelectedSession(s)} style={{fontSize:10,background:s.color+'15',borderLeft:`2px solid ${s.color}`,padding:'2px 4px',borderRadius:2,marginBottom:3,cursor:'pointer',color:s.color,fontWeight:600,overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}}>{fmtTime(s.startH,s.startM)} {s.studentName.split(' ')[0]}</div>)}
+          </div>;
+        })}
+      </div>
+    </div>;
+  };
+
+  const weekView=()=>{
+    const CELL_H=56; // pixels per hour
+    const startH=8,endH=21;
+    const totalH=(endH-startH)*CELL_H;
+    return <div style={{display:'flex',gap:0}}>
+      {/* Time gutter */}
+      <div style={{width:52,flexShrink:0,paddingTop:48}}>
+        {Array.from({length:endH-startH+1},(_,i)=>startH+i).map(h=>(
+          <div key={h} style={{height:CELL_H,display:'flex',alignItems:'flex-start',justifyContent:'flex-end',paddingRight:8,paddingTop:0}}>
+            <span style={{fontSize:11,color:'var(--text3)',fontWeight:500,lineHeight:1}}>{h===12?'12 PM':h<12?`${h} AM`:h>12?`${h-12} PM`:''}</span>
+          </div>
+        ))}
+      </div>
+      {/* Days */}
+      <div style={{flex:1,display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:0,borderLeft:'1px solid var(--border)'}}>
+        {weekDays.map((day,di)=>{
+          const daySessions=sessionForWeekDay(di);
+          const dayComps=compForDay(day);
+          const dayAvail=availForDay(day);
+          const isNow=isToday(day);
+          return <div key={di} style={{borderRight:'1px solid var(--border)',position:'relative'}}>
+            {/* Day header */}
+            <div style={{height:48,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',borderBottom:'1px solid var(--border)',background:isNow?'var(--blue-dim)':'var(--white)',position:'sticky',top:56,zIndex:2}}>
+              <div style={{fontSize:11,fontWeight:600,color:isNow?'var(--blue)':'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px'}}>{DAYS_SHORT[di]}</div>
+              <div style={{fontSize:18,fontWeight:800,color:isNow?'var(--blue)':'var(--text)',fontFamily:"'Bricolage Grotesque',sans-serif",lineHeight:1.1}}>{day.getDate()}</div>
             </div>
+            {/* Grid background */}
+            <div style={{position:'relative',height:totalH+CELL_H}}>
+              {Array.from({length:endH-startH+1},(_,i)=>i).map(i=>(
+                <div key={i} style={{position:'absolute',top:i*CELL_H,left:0,right:0,height:CELL_H,borderTop:'1px solid var(--border)',pointerEvents:'none'}}/>
+              ))}
+              {/* Availability blocks */}
+              {dayAvail.map((b,bi)=>{
+                const top=((b.startH-startH)*60+0)/60*CELL_H;
+                const ht=(b.dur/60)*CELL_H;
+                return <div key={bi} style={{position:'absolute',top,left:1,right:1,height:ht,background:'rgba(16,185,129,.06)',borderRadius:4,pointerEvents:'none'}}/>;
+              })}
+              {/* Competition markers */}
+              {dayComps.map((e,ei)=>(
+                <div key={ei} style={{position:'absolute',top:2,left:2,right:2,background:e.color+'18',border:`1px solid ${e.color}44`,borderRadius:4,padding:'3px 6px',zIndex:2}}>
+                  <div style={{fontSize:10,fontWeight:700,color:e.color,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{e.label}</div>
+                </div>
+              ))}
+              {/* Session blocks */}
+              {daySessions.map(s=>{
+                const top=((s.startH-startH)*60+s.startM)/60*CELL_H;
+                const ht=(s.dur/60)*CELL_H-3;
+                const isSelected=selectedSession?.id===s.id;
+                const isHovered=hoveredSession===s.id;
+                return <div key={s.id} onClick={()=>setSelectedSession(isSelected?null:s)}
+                  onMouseEnter={()=>setHoveredSession(s.id)} onMouseLeave={()=>setHoveredSession(null)}
+                  style={{position:'absolute',top,left:3,right:3,height:ht,background:s.color,borderRadius:6,padding:'5px 7px',cursor:'pointer',zIndex:3,
+                    boxShadow:isSelected||isHovered?`0 4px 16px ${s.color}66`:'0 2px 6px rgba(0,0,0,.12)',
+                    transform:isHovered?'scale(1.02)':'scale(1)',transition:'all .15s',overflow:'hidden'}}>
+                  <div style={{fontSize:10,fontWeight:700,color:'#fff',lineHeight:1.2,marginBottom:2,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{fmtTime(s.startH,s.startM)}</div>
+                  <div style={{fontSize:11,fontWeight:700,color:'#fff',lineHeight:1.2,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{s.studentName.split(' ')[0]}</div>
+                  {ht>55&&<div style={{fontSize:10,color:'rgba(255,255,255,.8)',marginTop:2,lineHeight:1.3,overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical'}}>{s.topic}</div>}
+                  {ht>80&&<div style={{fontSize:10,color:'rgba(255,255,255,.65)',marginTop:2}}>{s.location} · {fmtDur(s.dur)}</div>}
+                </div>;
+              })}
+            </div>
+          </div>;
+        })}
+      </div>
+    </div>;
+  };
+
+  return <div style={{display:'flex',gap:20,alignItems:'flex-start'}}>
+    <div style={{flex:1,minWidth:0}}>
+      {/* Calendar header */}
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
+        <div style={{display:'flex',alignItems:'center',gap:12}}>
+          <h2 style={{fontSize:20,fontWeight:800}}>{MONTHS[weekDays[0].getMonth()]} {weekDays[0].getFullYear()}</h2>
+          <div style={{display:'flex',gap:4}}>
+            <button onClick={()=>setWeekOffset(w=>w-1)} className="btn btn-ghost btn-sm" style={{padding:'6px 10px'}}>‹</button>
+            <button onClick={()=>setWeekOffset(0)} className="btn btn-ghost btn-sm">Today</button>
+            <button onClick={()=>setWeekOffset(w=>w+1)} className="btn btn-ghost btn-sm" style={{padding:'6px 10px'}}>›</button>
+          </div>
+        </div>
+        <div style={{display:'flex',gap:4,background:'var(--bg)',padding:3,borderRadius:8,border:'1px solid var(--border)'}}>
+          {[['week','Week'],['month','Month']].map(([v,l])=>(
+            <button key={v} onClick={()=>setView(v)} className="btn btn-sm" style={{background:view===v?'var(--white)':'transparent',color:view===v?'var(--text)':'var(--text3)',border:'none',boxShadow:view===v?'0 1px 4px rgba(0,0,0,.08)':'none',padding:'6px 14px'}}>{l}</button>
           ))}
-          {day==='Thursday'&&<div style={{background:'var(--white)',border:'2px solid var(--orange)',borderRadius:8,padding:'8px 12px',display:'flex',gap:8,alignItems:'center'}}><div style={{width:4,height:32,background:'var(--orange)',borderRadius:2}}/><div><div style={{fontSize:12,fontWeight:700}}>4:30 PM · Jordan Lee</div><div style={{fontSize:11,color:'var(--text2)'}}>Sensor Code + If/Else</div></div></div>}
-          {day!=='Monday'&&day!=='Thursday'&&<div style={{padding:'12px',fontSize:13,color:'var(--text3)'}}>No sessions</div>}
         </div>
       </div>
-    ))}
-  </div>
-);
+      {/* Student legend */}
+      <div style={{display:'flex',gap:12,marginBottom:12,flexWrap:'wrap'}}>
+        {[['Alex Chen','#2563EB'],['Sam Rivera','#7C3AED'],['Jordan Lee','#F97316']].map(([name,color])=>(
+          <div key={name} style={{display:'flex',alignItems:'center',gap:6,fontSize:12,color:'var(--text2)'}}>
+            <div style={{width:10,height:10,borderRadius:2,background:color,flexShrink:0}}/>
+            {name}
+          </div>
+        ))}
+        <div style={{display:'flex',alignItems:'center',gap:6,fontSize:12,color:'var(--text2)'}}>
+          <div style={{width:10,height:10,borderRadius:2,background:'rgba(16,185,129,.2)',border:'1px solid rgba(16,185,129,.4)',flexShrink:0}}/>
+          Available
+        </div>
+      </div>
+      {/* Calendar body */}
+      <div className="card" style={{padding:0,overflow:'hidden'}}>
+        <div style={{overflowX:'auto',overflowY:'auto',maxHeight:580}}>
+          {view==='week'?weekView():monthView()}
+        </div>
+      </div>
+    </div>
+
+    {/* Right panel */}
+    <div style={{width:260,flexShrink:0,display:'flex',flexDirection:'column',gap:12}}>
+      {/* Week stats */}
+      <div className="card">
+        <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',letterSpacing:'1px',textTransform:'uppercase',marginBottom:12}}>This Week</div>
+        {[['Sessions',`${bookedSlots} of ${totalSlots} slots`,'var(--blue)'],['Coaching Hours',`${totalHrs} hrs`,'var(--green)'],['Students',new Set(weekSessions.map(s=>s.studentId)).size+' active','var(--orange)']].map(([k,v,color])=>(
+          <div key={k} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
+            <span style={{fontSize:13,color:'var(--text2)'}}>{k}</span>
+            <span style={{fontSize:13,fontWeight:700,color}}>{v}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Session detail */}
+      {selectedSession?<div className="card" style={{borderTop:`3px solid ${selectedSession.color}`}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:12}}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',letterSpacing:'1px',textTransform:'uppercase'}}>Session Detail</div>
+          <button onClick={()=>setSelectedSession(null)} style={{background:'none',border:'none',cursor:'pointer',fontSize:16,color:'var(--text3)',padding:0,lineHeight:1}}>×</button>
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:10}}>
+          <div style={{width:8,height:8,borderRadius:'50%',background:selectedSession.color,flexShrink:0}}/>
+          <span style={{fontWeight:700,fontSize:15}}>{selectedSession.studentName}</span>
+        </div>
+        {[['Topic',selectedSession.topic],['Date',new Date(baseMs+(selectedSession.day-1)*86400000).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})],['Time',fmtTime(selectedSession.startH,selectedSession.startM)],['Duration',fmtDur(selectedSession.dur)],['Module',`M${selectedSession.module} · Session ${selectedSession.session}`],['Format',selectedSession.location]].map(([k,v])=>(
+          <div key={k} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'6px 0',borderBottom:'1px solid var(--border)'}}>
+            <span style={{color:'var(--text3)'}}>{k}</span><span style={{fontWeight:500,textAlign:'right',maxWidth:'55%'}}>{v}</span>
+          </div>
+        ))}
+        <button className="btn btn-primary btn-sm" style={{width:'100%',marginTop:12}}>Submit Session Notes</button>
+      </div>:
+      <div className="card" style={{textAlign:'center',padding:'24px 16px'}}>
+        <div style={{fontSize:24,marginBottom:8}}>📅</div>
+        <p style={{fontSize:13,color:'var(--text3)'}}>Click any session on the calendar to see details.</p>
+      </div>}
+
+      {/* Upcoming sessions */}
+      <div className="card">
+        <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',letterSpacing:'1px',textTransform:'uppercase',marginBottom:12}}>Upcoming</div>
+        {CALENDAR_SESSIONS.slice(0,4).map(s=>(
+          <div key={s.id} onClick={()=>setSelectedSession(s)} style={{display:'flex',gap:10,alignItems:'flex-start',marginBottom:10,cursor:'pointer',padding:'6px 8px',borderRadius:8,transition:'background .15s'}}
+            onMouseOver={e=>e.currentTarget.style.background='var(--bg)'}
+            onMouseOut={e=>e.currentTarget.style.background='transparent'}>
+            <div style={{width:3,borderRadius:2,background:s.color,alignSelf:'stretch',flexShrink:0,minHeight:36}}/>
+            <div>
+              <div style={{fontSize:12,fontWeight:700,color:'var(--text)'}}>{s.studentName.split(' ')[0]} · M{s.module}/S{s.session}</div>
+              <div style={{fontSize:11,color:'var(--text2)',marginTop:1}}>{s.topic}</div>
+              <div style={{fontSize:11,color:'var(--text3)',marginTop:2}}>{new Date(baseMs+(s.day-1)*86400000).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} · {fmtTime(s.startH,s.startM)}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Competition alerts */}
+      <div className="card" style={{borderTop:'3px solid var(--red)'}}>
+        <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',letterSpacing:'1px',textTransform:'uppercase',marginBottom:10}}>Competition Dates</div>
+        {COMP_EVENTS.map((e,i)=>(
+          <div key={i} style={{display:'flex',gap:8,alignItems:'center',marginBottom:8,padding:'6px 8px',background:e.color+'0F',borderRadius:6,border:`1px solid ${e.color}22`}}>
+            <span style={{fontSize:12}}>{e.label.split(' ')[0]}</span>
+            <div>
+              <div style={{fontSize:12,fontWeight:600,color:e.color}}>{e.label.substring(2)}</div>
+              <div style={{fontSize:11,color:'var(--text3)'}}>{new Date(baseMs+(e.day-1)*86400000).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>;
+};
 
 const CoachLibrary=()=>{
   const [selected,setSelected]=useState(null);
