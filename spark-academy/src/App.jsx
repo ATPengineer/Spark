@@ -1,104 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spark Academy — VEX Robotics Coaching</title>
-<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --navy:#0F1B2D;--navy2:#162234;--navy3:#1E3050;
-  --blue:#2563EB;--blue-light:#3B82F6;--blue-dim:#EFF6FF;
-  --orange:#F97316;--orange-dim:#FFF7ED;--orange-border:#FED7AA;
-  --bg:#F8FAFC;--white:#FFFFFF;
-  --text:#0F172A;--text2:#475569;--text3:#94A3B8;
-  --green:#10B981;--green-dim:#ECFDF5;
-  --red:#EF4444;--red-dim:#FEF2F2;
-  --border:#E2E8F0;--border2:#CBD5E1;
-}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
-h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;}
-code,pre{font-family:'JetBrains Mono',monospace;}
-::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:'DM Sans',sans-serif;letter-spacing:.01em;}
-.btn-primary{background:var(--blue);color:#fff;}
-.btn-primary:hover{background:var(--blue-light);}
-.btn-orange{background:var(--orange);color:#fff;}
-.btn-orange:hover{background:#ea6c0a;}
-.btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border);}
-.btn-ghost:hover{border-color:var(--border2);background:var(--white);}
-.btn-sm{padding:7px 14px;font-size:13px;}
-.btn-lg{padding:14px 28px;font-size:16px;}
-.card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;}
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.3px;}
-.badge-green{background:var(--green-dim);color:#065F46;}
-.badge-blue{background:var(--blue-dim);color:var(--blue);}
-.badge-orange{background:var(--orange-dim);color:#9A3412;}
-.badge-red{background:var(--red-dim);color:#991B1B;}
-.badge-gray{background:#F1F5F9;color:#475569;}
-.badge-navy{background:rgba(15,27,45,.08);color:var(--navy);}
-input,select,textarea{border:1.5px solid var(--border);border-radius:8px;padding:9px 13px;font-size:14px;width:100%;outline:none;transition:border .15s;font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);}
-input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.08);}
-label{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:.3px;text-transform:uppercase;display:block;margin-bottom:5px;}
-.sidebar-link{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;color:var(--text3);border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
-.sidebar-link:hover{background:rgba(255,255,255,.06);color:#fff;}
-.sidebar-link.active{background:rgba(37,99,235,.18);color:var(--blue-light);}
-.progress-bar{background:var(--border);border-radius:4px;height:6px;overflow:hidden;}
-.progress-fill{height:100%;border-radius:4px;transition:width .4s;}
-.nav-link{font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:color .15s;text-decoration:none;}
-.nav-link:hover{color:var(--text);}
-.faq-item{border-bottom:1px solid var(--border);padding:20px 0;}
-.faq-q{font-size:16px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'Bricolage Grotesque',sans-serif;}
-.faq-a{font-size:14px;color:var(--text2);line-height:1.7;margin-top:12px;}
-.session-state-locked{opacity:.5;pointer-events:none;}
-.tab{padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:none;background:none;font-family:'DM Sans',sans-serif;color:var(--text2);}
-.tab:hover{color:var(--text);background:#F1F5F9;}
-.tab.active{background:var(--white);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08);}
-.skill-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;background:var(--blue-dim);color:var(--blue);border:1px solid rgba(37,99,235,.2);}
-.skill-badge.earned{background:var(--green-dim);color:#065F46;border-color:rgba(16,185,129,.2);}
-.pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
-.shimmer{background:linear-gradient(90deg,#F1F5F9 25%,#E2E8F0 50%,#F1F5F9 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
-@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
-.stat-big{font-family:'Bricolage Grotesque',sans-serif;font-size:40px;font-weight:800;line-height:1;}
-.module-tab{padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:all .15s;font-family:'DM Sans',sans-serif;}
-.module-tab.active{background:var(--blue);color:#fff;}
-.session-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all .15s;}
-.session-row:hover{border-color:var(--blue-light);box-shadow:0 2px 8px rgba(37,99,235,.08);}
-.session-row.complete{border-color:var(--green);}
-.session-row.locked{opacity:.45;cursor:not-allowed;}
-.form-grid{display:grid;gap:16px;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:640px){.form-row{grid-template-columns:1fr;}}
-.alert{padding:12px 16px;border-radius:8px;font-size:13px;display:flex;gap:10px;align-items:flex-start;}
-.alert-orange{background:var(--orange-dim);border:1px solid var(--orange-border);color:#9A3412;}
-.alert-blue{background:var(--blue-dim);border:1px solid rgba(37,99,235,.2);color:var(--blue);}
-.alert-green{background:var(--green-dim);border:1px solid rgba(16,185,129,.2);color:#065F46;}
-.hero-gradient{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,#0D2847 100%);}
-.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);}
-.public-nav{position:sticky;top:0;z-index:100;background:rgba(15,27,45,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06);}
-.feature-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.coach-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:28px;transition:all .2s;}
-.coach-card:hover{border-color:var(--blue-light);box-shadow:0 8px 24px rgba(37,99,235,.1);}
-.pricing-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:32px;transition:all .2s;}
-.pricing-card.featured{border-color:var(--blue);box-shadow:0 8px 32px rgba(37,99,235,.15);}
-.pkg-check{color:var(--green);font-size:14px;}
-</style>
-</head>
-<body>
-<div id="root"></div>
-<script type="text/babel">
-const {useState,useEffect,useRef}=React;
+import { useEffect, useState } from 'react'
+import { supabase } from './lib/supabase'
 
-// ── MOCK DATA ─────────────────────────────────────────────────────────────────
 const STUDENTS=[
   {id:'alex',name:'Alex Chen',email:'alex@email.com',grade:9,age:14,phone:'555-0101',track:'VEXcode C++',module:2,session:4,totalSessions:28,hoursCoached:42,status:'on-track',competition:'Nov 8, 2026',githubUrl:'https://github.com/alexchen-vex',githubCommits:47,notebookPages:31,skillsEarned:['Override Game Rules','Kit Identification','VS Code Setup','Drivetrain Assembly','Motor Control','Sensor Reading'],competitionRecord:[{name:'Houston Regional',date:'Oct 18, 2026',placement:'12th / 34'}]},
   {id:'sam',name:'Sam Rivera',email:'sam@email.com',grade:10,age:15,phone:'555-0102',track:'PROS+LemLib',module:3,session:2,totalSessions:22,hoursCoached:33,status:'ahead',competition:'Nov 22, 2026',githubUrl:'https://github.com/samrivera-vex',githubCommits:91,notebookPages:44,skillsEarned:['Override Game Rules','Kit Identification','VS Code Setup','Drivetrain Assembly','Motor Control','Sensor Reading','Gear Ratios','Competition Drivetrain'],competitionRecord:[{name:'Houston Regional',date:'Oct 18, 2026',placement:'5th / 34'},{name:'Dallas Qualifier',date:'Nov 1, 2026',placement:'2nd / 28'}]},
@@ -109,11 +11,6 @@ const SESSIONS_HISTORY=[
   {id:1,studentId:'alex',date:'Nov 3, 2026',topic:'path.jerryio.com + Override Autonomous Planning',module:2,sessionNum:4,duration:90,exitMet:true,parentSummary:'Alex completed a full autonomous path in path.jerryio.com targeting the Autonomous Win Point — 7 Pins, 3 Goals. He drew the path confidently and understood the 12-second planning constraint. The spatial reasoning clicked well today. Practice: finalize waypoints and export for VEXcode before next session.',coachNotes:'Strong session. Alex asked great questions about the 12-second buffer — "why not use all 15?" That showed real match awareness. One thing to watch: he tends to place waypoints too close to field perimeter. Reminded him of the autonomous line rule.',challenge:'Finalize your path.jerryio.com plan, export the VEXcode output, and screenshot the full path for your notebook entry.'},
   {id:2,studentId:'alex',date:'Oct 27, 2026',topic:'Gear Ratios + Override Drivetrain Planning',module:2,sessionNum:3,duration:90,exitMet:true,parentSummary:"Alex calculated effective wheel RPM for three different configurations and selected his competition drivetrain spec: 450 RPM with 4\" omni wheels. He understood the torque/speed tradeoff and justified his choice with Override-specific reasons. He can now calculate RPM from any cartridge + gear ratio combination.",coachNotes:'Good retention from drivetrain build. Alex is strong on the math side.',challenge:'Calculate: what would your effective RPM be if you switched to a 36-tooth driving gear instead of 48? Show your work.'},
   {id:3,studentId:'sam',date:'Nov 4, 2026',topic:'path.jerryio.com + Override Autonomous Planning',module:3,sessionNum:2,duration:90,exitMet:true,parentSummary:"Sam is on the PROS+LemLib track and advancing quickly. Today he drew a complete Override autonomous path in path.jerryio.com targeting the Autonomous Win Point and exported it in LemLib path format. He understood why 12 seconds — not 15 — is the design target. Strong spatial awareness of the field.",coachNotes:'Sam is the strongest student on my roster right now. Ahead of pace. May introduce multi-path autonomous early.',challenge:'Export your LemLib path and begin the moveToPose command structure in VS Code. Just the function skeleton — no movement yet.'},
-];
-
-const PARTS_REQUESTS=[
-  {id:1,studentId:'alex',part:'VEX Smart Motor (11W)',qty:2,reason:'Two drivetrain motors showing overheating after 45 seconds — likely stalling from friction in wheel assembly',urgency:'high',status:'approved',date:'Oct 30, 2026',cost:79.99},
-  {id:2,studentId:'sam',part:'LemLib-compatible IMU',qty:1,reason:'Need second IMU for redundancy in competition autonomous',urgency:'medium',status:'pending',date:'Nov 2, 2026',cost:34.99},
 ];
 
 const CHALLENGES=[
@@ -178,13 +75,6 @@ const ProgressRing=({pct,size=52,stroke=5,color='#2563EB'})=>{
   </svg>;
 };
 
-const Countdown=({date})=>{
-  if(!date) return <span style={{color:'var(--text3)'}}>—</span>;
-  const d=new Date(date),now=new Date();
-  const days=Math.max(0,Math.ceil((d-now)/(1000*60*60*24)));
-  return <span style={{color:'var(--orange)',fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800}}>{days}</span>;
-};
-
 const FormatBadge=({fmt})=>{
   const map={'Online':['🌐','badge-blue'],'Hands-on':['🔧','badge-orange'],'Online + Hands-on':['💻','badge-navy'],'Discussion + Online':['💬','badge-gray']};
   const [icon,cls]=map[fmt]||['📋','badge-gray'];
@@ -223,7 +113,7 @@ const PublicHeader=({page,setPage,onLogin})=>(
   </nav>
 );
 
-const HomePage=({setPage,onLogin})=>{
+const HomePage=({setPage})=>{
   const [openFaq,setOpenFaq]=useState(null);
   return <div>
     {/* HERO */}
@@ -390,7 +280,7 @@ const CurriculumPage=({setPage})=>(
   </div>
 );
 
-const CoachesPage=({setPage})=>(
+const CoachesPage=()=>(
   <div style={{maxWidth:900,margin:'0 auto',padding:'60px 24px'}}>
     <div style={{textAlign:'center',marginBottom:60}}>
       <div className="section-label" style={{marginBottom:12}}>Our Coaches</div>
@@ -478,6 +368,34 @@ const PricingPage=({setPage})=>(
 const BookPage=({setPage})=>{
   const [submitted,setSubmitted]=useState(false);
   const [form,setForm]=useState({type:'1-on-1',level:'',days:'',name:'',email:'',phone:'',grade:'',coach:''});
+  const [saving,setSaving]=useState(false);
+  const [error,setError]=useState('');
+
+  const submitBooking=async()=>{
+    if(!form.name.trim()||!form.email.trim()){
+      setError('Student name and parent email are required.');
+      return;
+    }
+    setSaving(true);
+    setError('');
+    const {error:bookingError}=await supabase.from('booking_requests').insert({
+      session_type:form.type,
+      level:form.level,
+      preferred_times:form.days,
+      student_name:form.name.trim(),
+      grade:form.grade,
+      parent_email:form.email.trim(),
+      parent_phone:form.phone,
+      preferred_coach:form.coach,
+    });
+    setSaving(false);
+    if(bookingError){
+      setError(bookingError.message);
+      return;
+    }
+    setSubmitted(true);
+  };
+
   if(submitted) return <div style={{maxWidth:560,margin:'80px auto',padding:24,textAlign:'center'}}>
     <div style={{fontSize:56,marginBottom:16}}>✅</div>
     <h2 style={{fontSize:28,fontWeight:800,marginBottom:12}}>Request Submitted</h2>
@@ -526,7 +444,8 @@ const BookPage=({setPage})=>{
             <option>Ahriyen Kamran</option>
           </select>
         </div>
-        <button className="btn btn-orange btn-lg" style={{width:'100%'}} onClick={()=>setSubmitted(true)}>Submit Request</button>
+        {error&&<div className="alert alert-orange"><span>⚠</span><span>{error}</span></div>}
+        <button className="btn btn-orange btn-lg" style={{width:'100%',opacity:saving?0.6:1}} onClick={submitBooking} disabled={saving}>{saving?'Submitting...':'Submit Request'}</button>
         <p style={{fontSize:12,color:'var(--text3)',textAlign:'center'}}>You'll receive a confirmation email within 24 hours with intake scheduling info.</p>
       </div>
     </div>
@@ -535,7 +454,7 @@ const BookPage=({setPage})=>{
 
 const PublicSite=({onLogin})=>{
   const [page,setPage]=useState('home');
-  const pages={home:<HomePage setPage={setPage} onLogin={onLogin}/>,curriculum:<CurriculumPage setPage={setPage}/>,coaches:<CoachesPage setPage={setPage}/>,pricing:<PricingPage setPage={setPage}/>,book:<BookPage setPage={setPage}/>};
+  const pages={home:<HomePage setPage={setPage}/>,curriculum:<CurriculumPage setPage={setPage}/>,coaches:<CoachesPage/>,pricing:<PricingPage setPage={setPage}/>,book:<BookPage setPage={setPage}/>};
   return <div><PublicHeader page={page} setPage={setPage} onLogin={onLogin}/><div style={{minHeight:'100vh'}}>{pages[page]||pages.home}</div></div>;
 };
 
@@ -549,17 +468,192 @@ const ACCOUNTS=[
   {id:'admin',      type:'admin',   name:'Admin',          sub:'Spark Academy Operations',               avatar:'AD', bg:'#9333EA', email:'admin@sparkacdemy.co',   password:'Admin2026!'},
 ];
 
+const accountFromAuthUser=async(authUser)=>{
+  const demoAccount=ACCOUNTS.find(a=>a.email.toLowerCase()===authUser.email?.toLowerCase());
+  const {data:profile}=await supabase.from('profiles').select('*').eq('id',authUser.id).maybeSingle();
+  const role=profile?.role||authUser.user_metadata?.role||demoAccount?.type||'student';
+  const name=profile?.full_name||authUser.user_metadata?.full_name||demoAccount?.name||authUser.email?.split('@')[0]||'User';
+  return demoAccount||{
+    id:authUser.user_metadata?.student_id||authUser.id,
+    type:role,
+    name,
+    sub:`${role.charAt(0).toUpperCase()+role.slice(1)} Account`,
+    avatar:name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase(),
+    bg:'#2563EB',
+    email:authUser.email,
+  };
+};
+
+const createStarterStudent=(user)=>({
+  id:user.id,
+  name:user.name||'New Student',
+  email:user.email||'',
+  grade:user.grade||'',
+  age:'',
+  phone:'',
+  track:'VEXcode C++',
+  module:1,
+  session:1,
+  totalSessions:0,
+  hoursCoached:0,
+  status:'on-track',
+  competition:null,
+  githubUrl:'',
+  githubCommits:0,
+  notebookPages:0,
+  skillsEarned:[],
+  competitionRecord:[],
+  sessionHistory:[],
+  challenges:[],
+});
+
+const dbStudentToAppStudent=({user,studentRow,metrics,sessions,challenges,competitionRecords,skills})=>({
+  id:studentRow?.id||user.id,
+  profileId:user.id,
+  name:user.name||'New Student',
+  email:user.email||'',
+  grade:studentRow?.grade||user.grade||'',
+  age:studentRow?.age||'',
+  phone:studentRow?.phone||'',
+  track:studentRow?.track||'VEXcode C++',
+  module:studentRow?.current_module||1,
+  session:studentRow?.current_session||1,
+  totalSessions:metrics?.total_sessions||0,
+  hoursCoached:metrics?.hours_coached||0,
+  status:studentRow?.status||'on-track',
+  competition:studentRow?.competition_date||null,
+  githubUrl:studentRow?.github_url||'',
+  githubCommits:metrics?.github_commits||0,
+  notebookPages:metrics?.notebook_pages||0,
+  skillsEarned:skills.map(s=>s.name),
+  competitionRecord:competitionRecords.map(r=>({name:r.event_name,date:r.event_date,placement:r.placement})),
+  sessionHistory:sessions.map(s=>({
+    id:s.id,
+    studentId:studentRow?.id||user.id,
+    date:s.session_date?new Date(s.session_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'Not scheduled',
+    topic:s.topic,
+    module:s.module,
+    sessionNum:s.session_num,
+    duration:s.duration_minutes,
+    exitMet:s.exit_met,
+    parentSummary:s.parent_summary,
+    coachNotes:s.coach_notes,
+    challenge:s.challenge_text,
+  })),
+  challenges:challenges.map(c=>({id:c.id,sessionId:c.session_id,studentId:c.student_id,text:c.text,status:c.status})),
+});
+
+const loadStudentFromSupabase=async(user)=>{
+  const {data:studentRow,error:studentError}=await supabase.from('students').select('*').eq('profile_id',user.id).maybeSingle();
+  if(studentError) throw studentError;
+  if(!studentRow) return createStarterStudent(user);
+
+  const [metricsResult,sessionsResult,challengesResult,competitionResult,skillsResult]=await Promise.all([
+    supabase.from('student_metrics').select('*').eq('student_id',studentRow.id).maybeSingle(),
+    supabase.from('sessions').select('*').eq('student_id',studentRow.id).order('session_date',{ascending:false}),
+    supabase.from('challenges').select('*').eq('student_id',studentRow.id).order('created_at',{ascending:false}),
+    supabase.from('competition_records').select('*').eq('student_id',studentRow.id).order('event_date',{ascending:false}),
+    supabase.from('student_skills').select('skills(name)').eq('student_id',studentRow.id),
+  ]);
+
+  const firstError=[metricsResult,sessionsResult,challengesResult,competitionResult,skillsResult].find(result=>result.error)?.error;
+  if(firstError) throw firstError;
+
+  return dbStudentToAppStudent({
+    user,
+    studentRow,
+    metrics:metricsResult.data,
+    sessions:sessionsResult.data||[],
+    challenges:challengesResult.data||[],
+    competitionRecords:competitionResult.data||[],
+    skills:(skillsResult.data||[]).map(row=>row.skills).filter(Boolean),
+  });
+};
+
+const listStudentFromRow=(s)=>({
+  id:s.id,
+  name:s.profiles?.full_name||'Student',
+  email:s.profiles?.email||'Supabase profile',
+  grade:s.grade||'',
+  track:s.track,
+  module:s.current_module,
+  session:s.current_session,
+  status:s.status,
+  competition:s.competition_date,
+  githubUrl:s.github_url||'',
+  githubCommits:0,
+  notebookPages:0,
+  hoursCoached:0,
+  totalSessions:0,
+  skillsEarned:[],
+  competitionRecord:[],
+  sessionHistory:[],
+  challenges:[],
+});
+
+const isStarterStudent=(student)=>student.totalSessions===0&&student.skillsEarned.length===0&&student.githubCommits===0&&student.notebookPages===0;
+
+const getCompletedSessionsForModule=(student,moduleNum)=>{
+  if(isStarterStudent(student)) return 0;
+  const moduleInfo=MODULES[moduleNum-1];
+  if(!moduleInfo) return 0;
+  if(moduleNum<student.module) return moduleInfo.sessions;
+  if(moduleNum===student.module) return Math.max(0,Math.min(student.session-1,moduleInfo.sessions));
+  return 0;
+};
+
+const getSessionPlanForModule=(student,moduleNum)=>{
+  const moduleInfo=MODULES[moduleNum-1];
+  const completed=getCompletedSessionsForModule(student,moduleNum);
+  return MODULE1_SESSIONS.map((session,i)=>{
+    const withinModuleLimit=i<(moduleInfo?.sessions||MODULE1_SESSIONS.length);
+    const isCurrentModule=moduleNum===student.module;
+    const isPastModule=moduleNum<student.module&&!isStarterStudent(student);
+    let status='locked';
+    if(withinModuleLimit&&isPastModule) status='complete';
+    else if(withinModuleLimit&&i<completed) status='complete';
+    else if(withinModuleLimit&&isCurrentModule&&i===completed) status='upcoming';
+    return {...session,status};
+  });
+};
+
+const getNextCurriculumSession=(student)=>{
+  const sessions=getSessionPlanForModule(student,student.module);
+  return sessions.find(s=>s.status==='upcoming')||sessions.find(s=>s.status==='locked')||sessions[0];
+};
+
 const LoginPage=({onLogin,onBack})=>{
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   const [showPw,setShowPw]=useState(false);
   const [error,setError]=useState('');
+  const [loading,setLoading]=useState(false);
   const [showCreds,setShowCreds]=useState(false);
 
-  const attempt=()=>{
-    const acct=ACCOUNTS.find(a=>a.email.toLowerCase()===email.trim().toLowerCase()&&a.password===password);
-    if(acct){setError('');onLogin(acct);}
-    else setError('Incorrect email or password. Use the credentials panel below.');
+  const attempt=async()=>{
+    if(!email.trim()||!password) return;
+    setLoading(true);
+    setError('');
+
+    const {data,error:authError}=await supabase.auth.signInWithPassword({
+      email:email.trim(),
+      password,
+    });
+
+    setLoading(false);
+
+    if(authError){
+      const demoAccount=ACCOUNTS.find(a=>a.email.toLowerCase()===email.trim().toLowerCase()&&a.password===password);
+      if(demoAccount){
+        setError('');
+        onLogin(demoAccount);
+        return;
+      }
+      setError(authError.message);
+      return;
+    }
+
+    onLogin(await accountFromAuthUser(data.user));
   };
 
   const CRED_GROUPS=[
@@ -594,7 +688,7 @@ const LoginPage=({onLogin,onBack})=>{
           </div>
         </div>
         {error&&<div style={{background:'var(--red-dim)',border:'1px solid #FECACA',borderRadius:8,padding:'10px 14px',fontSize:13,color:'#991B1B',marginBottom:14}}>{error}</div>}
-        <button className="btn btn-primary btn-lg" style={{width:'100%',marginTop:14,opacity:email&&password?1:.5}} onClick={attempt}>Sign In</button>
+        <button className="btn btn-primary btn-lg" style={{width:'100%',marginTop:14,opacity:email&&password&&!loading?1:.5}} onClick={attempt} disabled={loading||!email||!password}>{loading?'Signing In...':'Sign In'}</button>
         <div style={{marginTop:20,paddingTop:16,borderTop:'1px solid var(--border)',textAlign:'center'}}>
           <button onClick={()=>setShowCreds(!showCreds)} style={{fontSize:13,color:'var(--blue)',background:'none',border:'none',cursor:'pointer',fontWeight:600}}>
             {showCreds?'Hide demo credentials ↑':'View demo credentials →'}
@@ -673,8 +767,27 @@ const TopBar=({title,actions})=>(
 // ── STUDENT APP ───────────────────────────────────────────────────────────────
 const StudentApp=({user,onLogout})=>{
   const [page,setPage]=useState('dashboard');
-  const student=STUDENTS.find(s=>s.id===user.id)||STUDENTS[0];
+  const demoStudent=STUDENTS.find(s=>s.id===user.id);
+  const [student,setStudent]=useState(demoStudent||createStarterStudent(user));
+  const [loading,setLoading]=useState(!demoStudent);
+  const [loadError,setLoadError]=useState('');
   const links=[['dashboard','Dashboard','⊞'],['curriculum','My Curriculum','📚'],['sessions','Sessions','📅'],['portfolio','Portfolio','🎯'],['challenges','Practice','⚡'],['messages','Messages','💬']];
+
+  useEffect(()=>{
+    let cancelled=false;
+    if(demoStudent) return;
+    loadStudentFromSupabase(user).then(dbStudent=>{
+      if(!cancelled){
+        setStudent(dbStudent);
+        setLoadError('');
+      }
+    }).catch(err=>{
+      if(!cancelled) setLoadError(err.message);
+    }).finally(()=>{
+      if(!cancelled) setLoading(false);
+    });
+    return ()=>{cancelled=true;};
+  },[demoStudent,user]);
 
   const renderPage=()=>{
     if(page==='dashboard') return <StudentDashboard student={student} setPage={setPage}/>;
@@ -691,16 +804,25 @@ const StudentApp=({user,onLogout})=>{
     <Sidebar user={{...user,type:'Student'}} page={page} setPage={setPage} links={links} onLogout={onLogout}/>
     <div style={{flex:1,marginLeft:240,display:'flex',flexDirection:'column',minHeight:'100vh'}}>
       <TopBar title={links.find(l=>l[0]===page)?.[1]||'Settings'}/>
-      <div style={{flex:1,padding:28,maxWidth:1100}}>{renderPage()}</div>
+      <div style={{flex:1,padding:28,maxWidth:1100}}>
+        {loadError&&<div className="alert alert-orange" style={{marginBottom:16}}><span>⚠</span><span>{loadError}</span></div>}
+        {loading?<div className="card" style={{padding:32,color:'var(--text2)'}}>Loading student data...</div>:renderPage()}
+      </div>
     </div>
   </div>;
 };
 
 const StudentDashboard=({student,setPage})=>{
-  const sessions=SESSIONS_HISTORY.filter(s=>s.studentId===student.id);
-  const challenges=CHALLENGES.filter(c=>c.studentId===student.id);
+  const sessions=student.sessionHistory||SESSIONS_HISTORY.filter(s=>s.studentId===student.id);
+  const challenges=student.challenges||CHALLENGES.filter(c=>c.studentId===student.id);
   const daysUntil=student.competition?Math.max(0,Math.ceil((new Date(student.competition)-new Date())/(86400000))):null;
-  const modPct=Math.round((student.session/8)*100);
+  const nextSession=getNextCurriculumSession(student);
+  const seasonModules=MODULES.slice(0,3).map(m=>{
+    const completed=getCompletedSessionsForModule(student,m.num);
+    const pct=Math.round((completed/m.sessions)*100);
+    const color=pct===100?'var(--green)':m.num===student.module?'var(--blue)':'var(--text3)';
+    return [`Module ${m.num}`,m.name,pct,color];
+  });
   return <div>
     <div style={{marginBottom:28}}>
       <h2 style={{fontSize:28,fontWeight:800,letterSpacing:'-.02em'}}>Welcome back, {student.name.split(' ')[0]} 👋</h2>
@@ -719,8 +841,8 @@ const StudentDashboard=({student,setPage})=>{
       <div style={{display:'flex',flexDirection:'column',gap:16}}>
         <div className="card" style={{borderLeft:'4px solid var(--blue)'}}>
           <div style={{fontSize:11,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:8}}>Next Session</div>
-          <div style={{fontWeight:700,fontSize:17,marginBottom:6}}>First Override Autonomous — Write + Test</div>
-          <div style={{display:'flex',gap:8,flexWrap:'wrap'}}><FormatBadge fmt="Online + Hands-on"/><span className="badge badge-blue">Module {student.module} · Session {student.session+1}</span><span className="badge badge-gray">90 min</span></div>
+          <div style={{fontWeight:700,fontSize:17,marginBottom:6}}>{nextSession.title}</div>
+          <div style={{display:'flex',gap:8,flexWrap:'wrap'}}><FormatBadge fmt={nextSession.format}/><span className="badge badge-blue">Module {student.module} · {nextSession.num}</span><span className="badge badge-gray">{nextSession.duration}</span></div>
           <div style={{marginTop:12,display:'flex',gap:8}}>
             <button className="btn btn-primary btn-sm" onClick={()=>setPage('curriculum')}>Prep Materials</button>
           </div>
@@ -730,7 +852,7 @@ const StudentDashboard=({student,setPage})=>{
             <div style={{fontWeight:700}}>Season Progress</div>
             <span style={{fontSize:13,color:'var(--text3)'}}>Module {student.module}</span>
           </div>
-          {[['Module 1','Foundation',100,'var(--green)'],['Module 2','Building',Math.round((student.session/6)*100),'var(--blue)'],['Module 3','Programming',0,'var(--text3)']].map(([m,name,pct,color])=>(
+          {seasonModules.map(([m,name,pct,color])=>(
             <div key={m} style={{marginBottom:12}}>
               <div style={{display:'flex',justifyContent:'space-between',fontSize:13,marginBottom:5}}><span style={{fontWeight:500}}>{m} — {name}</span><span style={{color:'var(--text3)'}}>{pct}%</span></div>
               <div className="progress-bar"><div className="progress-fill" style={{width:`${pct}%`,background:color}}/></div>
@@ -755,12 +877,14 @@ const StudentDashboard=({student,setPage})=>{
             <div style={{fontSize:13,color:'var(--text2)',lineHeight:1.7,marginBottom:12}}>{challenges[0].text}</div>
             <StatusBadge s={challenges[0].status}/>
           </div>}
+          {!challenges[0]&&<div style={{fontSize:14,color:'var(--text3)',lineHeight:1.6}}>No practice challenges assigned yet.</div>}
         </div>
         <div className="card">
           <div style={{fontWeight:700,marginBottom:12}}>Skills Earned</div>
           <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
             {student.skillsEarned.slice(0,4).map(s=><span key={s} className="skill-badge earned">{s}</span>)}
             {student.skillsEarned.length>4&&<span className="skill-badge" style={{background:'#F1F5F9',color:'var(--text3)'}}>+{student.skillsEarned.length-4} more</span>}
+            {student.skillsEarned.length===0&&<span style={{fontSize:14,color:'var(--text3)'}}>No skills earned yet.</span>}
           </div>
         </div>
       </div>
@@ -771,8 +895,8 @@ const StudentDashboard=({student,setPage})=>{
 const StudentCurriculum=({student})=>{
   const [activeModule,setActiveModule]=useState(1);
   const [selectedSession,setSelectedSession]=useState(null);
-  const mod1Done=student.module>1||(student.module===1&&student.session>4);
-  const sessions=activeModule===1?MODULE1_SESSIONS:MODULE1_SESSIONS.map((s,i)=>({...s,status:i<2?'complete':i===2?'upcoming':'locked'}));
+  const sessions=getSessionPlanForModule(student,activeModule);
+  const completed=getCompletedSessionsForModule(student,activeModule);
   if(selectedSession) return <SessionDetailView session={selectedSession} onBack={()=>setSelectedSession(null)}/>;
   return <div>
     <div style={{display:'flex',gap:8,marginBottom:24,flexWrap:'wrap'}}>
@@ -786,7 +910,7 @@ const StudentCurriculum=({student})=>{
           <div style={{fontWeight:800,fontSize:18,fontFamily:"'Bricolage Grotesque',sans-serif"}}>Module {activeModule} — {MODULES[activeModule-1].name}</div>
           <div style={{fontSize:13,color:'var(--text2)',marginTop:4}}>{MODULES[activeModule-1].desc}</div>
         </div>
-        <ModuleProgress current={activeModule===1?Math.min(student.session,8):2} total={MODULES[activeModule-1].sessions}/>
+        <ModuleProgress current={completed} total={MODULES[activeModule-1].sessions}/>
       </div>
     </div>
     <div style={{display:'flex',flexDirection:'column',gap:8}}>
@@ -846,12 +970,14 @@ const SessionDetailView=({session,onBack})=>(
 );
 
 const StudentSessions=({student})=>{
-  const history=SESSIONS_HISTORY.filter(s=>s.studentId===student.id);
+  const history=student.sessionHistory||SESSIONS_HISTORY.filter(s=>s.studentId===student.id);
+  const nextSession=getNextCurriculumSession(student);
   return <div>
     <div style={{marginBottom:24}}>
-      <div className="alert alert-blue"><span>📅</span><span>Your next session: <strong>First Override Autonomous — Write + Test</strong> — scheduled for next week. Prep materials are ready.</span></div>
+      <div className="alert alert-blue"><span>📅</span><span>Your next session: <strong>{nextSession.title}</strong>. Prep materials are ready.</span></div>
     </div>
     <div style={{fontWeight:700,marginBottom:12}}>Session History</div>
+    {history.length===0&&<div className="card" style={{textAlign:'center',padding:32,color:'var(--text3)'}}>No sessions completed yet.</div>}
     {history.map(s=>(
       <div key={s.id} className="card" style={{marginBottom:12}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
@@ -920,7 +1046,7 @@ const StudentPortfolio=({student})=>{
 };
 
 const StudentChallenges=({student})=>{
-  const [challenges,setChallenges]=useState(CHALLENGES.filter(c=>c.studentId===student.id));
+  const [challenges,setChallenges]=useState(student.challenges||CHALLENGES.filter(c=>c.studentId===student.id));
   const toggle=(id)=>setChallenges(ch=>ch.map(c=>c.id===id?{...c,status:c.status==='complete'?'in-progress':'complete'}:c));
   return <div>
     <div className="alert alert-blue" style={{marginBottom:24}}><span>⚡</span><span>Practice challenges are optional and take 10–15 minutes. They're designed to keep skills fresh between sessions.</span></div>
@@ -936,7 +1062,7 @@ const StudentChallenges=({student})=>{
   </div>;
 };
 
-const StudentMessages=({student})=>{
+const StudentMessages=()=>{
   const [msg,setMsg]=useState('');
   const [msgs,setMsgs]=useState([{from:'coach',text:'Great work in our last session, Alex! Your path planning was really solid.',time:'Nov 3, 2:45 PM'},{from:'student',text:'Thanks! I have a question about the 12-second rule — does the preload count toward the 7-pin target?',time:'Nov 3, 4:12 PM'},{from:'coach',text:'Yes! The preload absolutely counts. Score it first — it\'s the easiest guaranteed pin in autonomous.',time:'Nov 3, 4:30 PM'}]);
   const send=()=>{if(msg.trim()){setMsgs([...msgs,{from:'student',text:msg,time:'Just now'}]);setMsg('');}};
@@ -1090,7 +1216,7 @@ const CoachApp=({user,onLogout})=>{
   </div>;
 };
 
-const CoachDashboard=({onSelectStudent})=>(
+const CoachDashboard=()=>(
   <div>
     <div style={{marginBottom:24}}><h2 style={{fontSize:24,fontWeight:800}}>Good morning, Ahriyen</h2><p style={{fontSize:14,color:'var(--text2)',marginTop:4}}>3 active students · 2 sessions today</p></div>
     <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:24}}>
@@ -1126,13 +1252,29 @@ const CoachDashboard=({onSelectStudent})=>(
   </div>
 );
 
-const CoachStudents=({onSelect})=>(
-  <div>
+const CoachStudents=({onSelect})=>{
+  const [supabaseStudents,setSupabaseStudents]=useState([]);
+  const [notice,setNotice]=useState('');
+
+  useEffect(()=>{
+    let cancelled=false;
+    supabase.from('students').select('*, profiles(full_name, role)').order('created_at',{ascending:false}).then(({data,error})=>{
+      if(cancelled) return;
+      if(error) setNotice(`Could not load Supabase students yet: ${error.message}`);
+      else setSupabaseStudents((data||[]).filter(s=>s.profiles?.role==='student').map(listStudentFromRow));
+    });
+    return ()=>{cancelled=true;};
+  },[]);
+
+  const rows=[...supabaseStudents,...STUDENTS];
+
+  return <div>
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20}}>
-      <div><h2 style={{fontSize:22,fontWeight:800}}>My Students</h2><p style={{fontSize:14,color:'var(--text2)'}}>3 active</p></div>
+      <div><h2 style={{fontSize:22,fontWeight:800}}>My Students</h2><p style={{fontSize:14,color:'var(--text2)'}}>{rows.length} active</p></div>
     </div>
+    {notice&&<div className="alert alert-orange" style={{marginBottom:16}}><span>⚠</span><div>{notice}</div></div>}
     <div style={{display:'flex',flexDirection:'column',gap:10}}>
-      {STUDENTS.map(s=>(
+      {rows.map(s=>(
         <div key={s.id} className="card" style={{cursor:'pointer',display:'flex',gap:16,alignItems:'center'}} onClick={()=>onSelect(s)}
           onMouseOver={e=>e.currentTarget.style.borderColor='var(--blue-light)'}
           onMouseOut={e=>e.currentTarget.style.borderColor='var(--border)'}>
@@ -1144,15 +1286,15 @@ const CoachStudents=({onSelect})=>(
               {s.competition&&<span className="badge badge-orange">🏆 Competition {s.competition}</span>}
             </div>
             <div style={{fontSize:13,color:'var(--text2)',marginBottom:8}}>Module {s.module} · Session {s.session} · {s.track}</div>
-            <div className="progress-bar" style={{maxWidth:300}}><div className="progress-fill" style={{width:`${Math.round((s.session/8)*100)}%`,background:s.status==='ahead'?'var(--blue)':s.status==='behind'?'var(--red)':'var(--green)'}}/></div>
+            <div className="progress-bar" style={{maxWidth:300}}><div className="progress-fill" style={{width:`${Math.round((Math.max(0,s.session-1)/8)*100)}%`,background:s.status==='ahead'?'var(--blue)':s.status==='behind'?'var(--red)':'var(--green)'}}/></div>
           </div>
-          <div style={{textAlign:'right',fontSize:12,color:'var(--text3)'}}>Last active<br/>{s.id==='jordan'?'3 days ago':'Today'}</div>
+          <div style={{textAlign:'right',fontSize:12,color:'var(--text3)'}}>Last active<br/>{supabaseStudents.some(st=>st.id===s.id)?'New account':s.id==='jordan'?'3 days ago':'Today'}</div>
           <span style={{color:'var(--text3)',fontSize:18}}>›</span>
         </div>
       ))}
     </div>
-  </div>
-);
+  </div>;
+};
 
 const StudentDetailCoach=({student,onBack,onPostSession})=>{
   const [tab,setTab]=useState('overview');
@@ -1211,7 +1353,7 @@ const PostSessionForm=({student,onBack})=>{
     <div style={{fontSize:52,marginBottom:16}}>✅</div>
     <h2 style={{fontSize:24,fontWeight:800,marginBottom:8}}>Session Submitted</h2>
     <p style={{fontSize:15,color:'var(--text2)',marginBottom:8}}>Session marked complete in {s.name}'s curriculum.</p>
-    <p style={{fontSize:14,color:'var(--green)',marginBottom:24}}>✓ Parent summary sent to {s.email.replace('sam','parent'||'student'||'')||'parent@email.com'}</p>
+    <p style={{fontSize:14,color:'var(--green)',marginBottom:24}}>✓ Parent summary sent to {s.email.replace('sam','parent')||'parent@email.com'}</p>
     <button className="btn btn-ghost" onClick={onBack}>← Back to Student</button>
   </div>;
   return <div style={{maxWidth:720}}>
@@ -1238,7 +1380,7 @@ const PostSessionForm=({student,onBack})=>{
         {form.parentSummary.length>0&&form.parentSummary.length<150&&<div style={{fontSize:12,color:'var(--orange)',marginTop:4}}>{150-form.parentSummary.length} more characters for minimum — be more specific.</div>}
       </div>
       <div style={{display:'flex',alignItems:'center',gap:10}}>
-        <input type="checkbox" id="adj" checked={form.adjustment} onChange={e=>setForm({...form,adjustment:e.target.checked})} style={{width:auto}}/>
+        <input type="checkbox" id="adj" checked={form.adjustment} onChange={e=>setForm({...form,adjustment:e.target.checked})} style={{width:'auto'}}/>
         <label htmlFor="adj" style={{textTransform:'none',fontSize:14,fontWeight:500,letterSpacing:0,marginBottom:0}}>Flag a curriculum adjustment request to admin</label>
       </div>
       {form.adjustment&&<div><textarea rows={2} value={form.adjustNote} onChange={e=>setForm({...form,adjustNote:e.target.value})} placeholder="What adjustment and why?"/></div>}
@@ -1274,7 +1416,6 @@ const CoachSchedule=()=>{
   const [selectedSession,setSelectedSession]=useState(null);
   const [hoveredSession,setHoveredSession]=useState(null);
 
-  const HOURS=[8,9,10,11,12,13,14,15,16,17,18,19,20];
   const DAYS_SHORT=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -1344,7 +1485,7 @@ const CoachSchedule=()=>{
           const hasComp=day&&compByDay[day];
           const isCurrentDay=day&&new Date(2026,10,day).toDateString()===new Date().toDateString();
           return <div key={i} style={{minHeight:100,padding:6,border:'1px solid var(--border)',borderTop:'none',borderLeft:i%7===0?'none':'1px solid var(--border)',background:isCurrentDay?'#EFF6FF':'var(--white)',position:'relative'}}>
-            {day&&<div style={{fontWeight:isCurrentDay?800:500,fontSize:13,color:isCurrentDay?'var(--blue)':'var(--text)',marginBottom:4,width:24,height:24,borderRadius:'50%',background:isCurrentDay?'var(--blue)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',color:isCurrentDay?'#fff':'var(--text)'}}>{day}</div>}
+            {day&&<div style={{fontWeight:isCurrentDay?800:500,fontSize:13,marginBottom:4,width:24,height:24,borderRadius:'50%',background:isCurrentDay?'var(--blue)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',color:isCurrentDay?'#fff':'var(--text)'}}>{day}</div>}
             {hasComp&&compByDay[day].map((e,ei)=><div key={ei} style={{fontSize:10,background:e.color+'15',borderLeft:`2px solid ${e.color}`,padding:'2px 4px',borderRadius:2,marginBottom:3,color:e.color,fontWeight:600,overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}}>{e.label}</div>)}
             {hasSessions&&sessionsByDay[day].map((s,si)=><div key={si} onClick={()=>setSelectedSession(s)} style={{fontSize:10,background:s.color+'15',borderLeft:`2px solid ${s.color}`,padding:'2px 4px',borderRadius:2,marginBottom:3,cursor:'pointer',color:s.color,fontWeight:600,overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}}>{fmtTime(s.startH,s.startM)} {s.studentName.split(' ')[0]}</div>)}
           </div>;
@@ -1588,6 +1729,7 @@ const AdminApp=({user,onLogout})=>{
     if(page==='dashboard') return <AdminDashboard/>;
     if(page==='students') return <AdminStudents/>;
     if(page==='coaches') return <AdminCoaches/>;
+    if(page==='booking') return <AdminBookings/>;
     if(page==='billing') return <AdminBilling/>;
     if(page==='analytics') return <AdminAnalytics/>;
     if(page==='settings') return <SettingsPage user={user}/>;
@@ -1637,12 +1779,120 @@ const AdminDashboard=()=>(
   </div>
 );
 
-const AdminStudents=()=>(
-  <div>
+const AdminStudents=()=>{
+  const [showEnroll,setShowEnroll]=useState(false);
+  const [createdUsers,setCreatedUsers]=useState([]);
+  const [supabaseStudents,setSupabaseStudents]=useState([]);
+  const [selectedStudent,setSelectedStudent]=useState(null);
+  const [form,setForm]=useState({name:'',email:'',password:'',role:'student',track:'VEXcode C++',grade:''});
+  const [saving,setSaving]=useState(false);
+  const [notice,setNotice]=useState('');
+  const [error,setError]=useState('');
+
+  useEffect(()=>{
+    let cancelled=false;
+    supabase.from('students').select('*, profiles(full_name, role)').order('created_at',{ascending:false}).then(({data,error})=>{
+      if(cancelled) return;
+      if(error) setNotice(`Could not load Supabase students yet: ${error.message}`);
+      else setSupabaseStudents((data||[]).filter(s=>s.profiles?.role==='student').map(listStudentFromRow));
+    });
+    return ()=>{cancelled=true;};
+  },[]);
+
+  const createAccount=async()=>{
+    if(!form.name.trim()||!form.email.trim()||!form.password){
+      setError('Name, email, and password are required.');
+      return;
+    }
+    setSaving(true);
+    setError('');
+    setNotice('');
+
+    const {data,error:signUpError}=await supabase.auth.signUp({
+      email:form.email.trim(),
+      password:form.password,
+      options:{data:{full_name:form.name.trim(),role:form.role,track:form.track,grade:form.grade}},
+    });
+
+    if(signUpError){
+      setSaving(false);
+      setError(signUpError.message);
+      return;
+    }
+
+    if(data.user?.id){
+      const {error:profileError}=await supabase.from('profiles').upsert({
+        id:data.user.id,
+        full_name:form.name.trim(),
+        role:form.role,
+      });
+      if(profileError){
+        setNotice(`Account created. Profile insert needs RLS/trigger setup: ${profileError.message}`);
+      }else if(form.role==='student'){
+        const {data:studentRow,error:studentError}=await supabase.from('students').upsert({
+          profile_id:data.user.id,
+          grade:form.grade?Number(form.grade):null,
+          track:form.track,
+          current_module:1,
+          current_session:1,
+          status:'on-track',
+        },{onConflict:'profile_id'}).select().single();
+
+        if(studentError){
+          setNotice(`Account and profile created. Student row needs RLS setup: ${studentError.message}`);
+        }else{
+          const {error:metricsError}=await supabase.from('student_metrics').upsert({
+            student_id:studentRow.id,
+            github_commits:0,
+            notebook_pages:0,
+            hours_coached:0,
+            total_sessions:0,
+          },{onConflict:'student_id'});
+          setNotice(metricsError?`Account and student created. Metrics row needs RLS setup: ${metricsError.message}`:'Account, profile, student, and metrics rows saved to Supabase.');
+        }
+      }else{
+        setNotice('Account created and profile saved to Supabase.');
+      }
+    }else{
+      setNotice('Signup submitted. If email confirmation is enabled, the profile will be created after the user confirms their email.');
+    }
+
+    setCreatedUsers(users=>[{id:data.user?.id||form.email,email:form.email.trim(),name:form.name.trim(),role:form.role,track:form.track,grade:form.grade},...users]);
+    setForm({name:'',email:'',password:'',role:'student',track:'VEXcode C++',grade:''});
+    setSaving(false);
+  };
+
+  const rows=[...createdUsers.map(u=>({id:u.id,name:u.name,email:u.email,track:u.track||'VEXcode C++',module:1,session:1,status:'pending',competition:null,role:u.role})),...supabaseStudents,...STUDENTS];
+
+  if(selectedStudent) return <AdminStudentDetail student={selectedStudent} onBack={()=>setSelectedStudent(null)}/>;
+
+  return <div>
     <div style={{display:'flex',justifyContent:'space-between',marginBottom:20}}>
-      <div><h2 style={{fontSize:22,fontWeight:800}}>All Students</h2><p style={{fontSize:14,color:'var(--text2)'}}>3 active · 0 paused · 1 pending intake</p></div>
-      <button className="btn btn-primary btn-sm">+ Enroll Student</button>
+      <div><h2 style={{fontSize:22,fontWeight:800}}>All Students</h2><p style={{fontSize:14,color:'var(--text2)'}}>{rows.length} total · {createdUsers.length} Supabase-created this session</p></div>
+      <button className="btn btn-primary btn-sm" onClick={()=>setShowEnroll(true)}>+ Enroll Student</button>
     </div>
+    {(notice||error)&&<div className={`alert ${error?'alert-orange':'alert-green'}`} style={{marginBottom:16}}><span>{error?'⚠':'✓'}</span><div>{error||notice}</div></div>}
+    {showEnroll&&<div className="card" style={{marginBottom:16,borderColor:'var(--blue)'}}>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
+        <div><div style={{fontWeight:800,fontSize:18,fontFamily:"'Bricolage Grotesque',sans-serif"}}>Create Supabase Account</div><div style={{fontSize:13,color:'var(--text2)'}}>Creates an Auth user and writes the matching row to profiles.</div></div>
+        <button className="btn btn-ghost btn-sm" onClick={()=>setShowEnroll(false)}>Close</button>
+      </div>
+      <div className="form-grid">
+        <div className="form-row">
+          <div><label>Full Name</label><input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Student name"/></div>
+          <div><label>Email</label><input type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="student@email.com"/></div>
+        </div>
+        <div className="form-row">
+          <div><label>Temporary Password</label><input type="password" value={form.password} onChange={e=>setForm({...form,password:e.target.value})} placeholder="At least 6 characters"/></div>
+          <div><label>Role</label><select value={form.role} onChange={e=>setForm({...form,role:e.target.value})}><option value="student">Student</option><option value="parent">Parent</option><option value="coach">Coach</option><option value="admin">Admin</option></select></div>
+        </div>
+        <div className="form-row">
+          <div><label>Track</label><select value={form.track} onChange={e=>setForm({...form,track:e.target.value})}><option>VEXcode C++</option><option>PROS+LemLib</option></select></div>
+          <div><label>Grade</label><input value={form.grade} onChange={e=>setForm({...form,grade:e.target.value})} placeholder="9"/></div>
+        </div>
+        <button className="btn btn-primary btn-lg" onClick={createAccount} disabled={saving} style={{opacity:saving?0.6:1}}>{saving?'Creating Account...':'Create Account'}</button>
+      </div>
+    </div>}
     <div className="card" style={{marginBottom:16,display:'flex',gap:10}}>
       <input placeholder="Search by name, email, module..." style={{flex:1}}/>
       <select style={{width:'auto'}}><option>All Coaches</option><option>Ahriyen Kamran</option></select>
@@ -1650,7 +1900,7 @@ const AdminStudents=()=>(
     </div>
     <table style={{width:'100%',borderCollapse:'collapse'}}>
       <thead><tr style={{borderBottom:'2px solid var(--border)'}}>{['Name','Track','Module','Coach','Status','Competition','Actions'].map(h=><th key={h} style={{textAlign:'left',padding:'10px 12px',fontSize:11,color:'var(--text3)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.5px'}}>{h}</th>)}</tr></thead>
-      <tbody>{STUDENTS.map(s=>(
+      <tbody>{rows.map(s=>(
         <tr key={s.id} style={{borderBottom:'1px solid var(--border)'}} onMouseOver={e=>e.currentTarget.style.background='var(--bg)'} onMouseOut={e=>e.currentTarget.style.background=''}>
           <td style={{padding:'12px'}}><div style={{display:'flex',gap:10,alignItems:'center'}}><Avatar name={s.name} size={32} bg={s.id==='sam'?'#7C3AED':s.id==='jordan'?'#0891B2':'var(--blue)'}/><div><div style={{fontWeight:600,fontSize:14}}>{s.name}</div><div style={{fontSize:12,color:'var(--text3)'}}>{s.email}</div></div></div></td>
           <td style={{padding:'12px',fontSize:13}}><span className="badge badge-navy">{s.track}</span></td>
@@ -1658,10 +1908,48 @@ const AdminStudents=()=>(
           <td style={{padding:'12px',fontSize:13}}>Ahriyen K.</td>
           <td style={{padding:'12px'}}><StatusBadge s={s.status}/></td>
           <td style={{padding:'12px',fontSize:13,color:'var(--text2)'}}>{s.competition||'—'}</td>
-          <td style={{padding:'12px'}}><div style={{display:'flex',gap:6}}><button className="btn btn-ghost btn-sm">View</button><button className="btn btn-ghost btn-sm">Reassign</button></div></td>
+          <td style={{padding:'12px'}}><div style={{display:'flex',gap:6}}><button className="btn btn-ghost btn-sm" onClick={()=>setSelectedStudent(s)}>View</button><button className="btn btn-ghost btn-sm">Reassign</button></div></td>
         </tr>
       ))}</tbody>
     </table>
+  </div>;
+};
+
+const AdminStudentDetail=({student,onBack})=>(
+  <div>
+    <button className="btn btn-ghost btn-sm" style={{marginBottom:20}} onClick={onBack}>← All Students</button>
+    <div className="card" style={{marginBottom:16}}>
+      <div style={{display:'flex',gap:16,alignItems:'center'}}>
+        <Avatar name={student.name} size={56} bg={student.id==='sam'?'#7C3AED':student.id==='jordan'?'#0891B2':'var(--blue)'}/>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:800,fontSize:24,fontFamily:"'Bricolage Grotesque',sans-serif"}}>{student.name}</div>
+          <div style={{fontSize:14,color:'var(--text2)',marginTop:4}}>{student.email}</div>
+          <div style={{display:'flex',gap:8,marginTop:8}}><StatusBadge s={student.status}/><span className="badge badge-navy">{student.track}</span></div>
+        </div>
+      </div>
+    </div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:12}}>Student Details</div>
+        {[['Track',student.track],['Grade',student.grade||'Not set'],['Module','Module '+student.module],['Session','Session '+student.session],['Competition',student.competition||'None set']].map(([k,v])=>(
+          <div key={k} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--border)',fontSize:13}}><span style={{color:'var(--text2)'}}>{k}</span><span style={{fontWeight:600}}>{v}</span></div>
+        ))}
+      </div>
+      <div className="card">
+        <div style={{fontWeight:700,marginBottom:12}}>Progress Metrics</div>
+        {[['Total Sessions',student.totalSessions||0],['Hours Coached',student.hoursCoached||0],['GitHub Commits',student.githubCommits||0],['Notebook Pages',student.notebookPages||0],['Skills Earned',student.skillsEarned?.length||0]].map(([k,v])=>(
+          <div key={k} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid var(--border)',fontSize:13}}><span style={{color:'var(--text2)'}}>{k}</span><span style={{fontWeight:600}}>{v}</span></div>
+        ))}
+      </div>
+    </div>
+    <div className="card" style={{marginTop:16}}>
+      <div style={{fontWeight:700,marginBottom:12}}>Admin Actions</div>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+        <button className="btn btn-primary btn-sm">Edit Student</button>
+        <button className="btn btn-ghost btn-sm">Assign Coach</button>
+        <button className="btn btn-ghost btn-sm">Add Session Note</button>
+      </div>
+    </div>
   </div>
 );
 
@@ -1691,6 +1979,62 @@ const AdminCoaches=()=>(
     </div>
   </div>
 );
+
+const AdminBookings=()=>{
+  const [requests,setRequests]=useState([]);
+  const [notice,setNotice]=useState('');
+
+  useEffect(()=>{
+    let cancelled=false;
+    supabase.from('booking_requests').select('*').order('created_at',{ascending:false}).then(({data,error})=>{
+      if(cancelled) return;
+      if(error) setNotice(`Could not load booking requests: ${error.message}`);
+      else setRequests(data||[]);
+    });
+    return ()=>{cancelled=true;};
+  },[]);
+
+  const updateStatus=async(id,status)=>{
+    const {error}=await supabase.from('booking_requests').update({status}).eq('id',id);
+    if(error){
+      setNotice(error.message);
+      return;
+    }
+    setRequests(reqs=>reqs.map(r=>r.id===id?{...r,status}:r));
+  };
+
+  return <div>
+    <div style={{display:'flex',justifyContent:'space-between',marginBottom:20}}>
+      <div><h2 style={{fontSize:22,fontWeight:800}}>Booking Requests</h2><p style={{fontSize:14,color:'var(--text2)'}}>{requests.length} total intake requests</p></div>
+    </div>
+    {notice&&<div className="alert alert-orange" style={{marginBottom:16}}><span>⚠</span><div>{notice}</div></div>}
+    {requests.length===0?<div className="card" style={{padding:32,textAlign:'center',color:'var(--text3)'}}>No booking requests yet.</div>:<div style={{display:'flex',flexDirection:'column',gap:12}}>
+      {requests.map(req=>(
+        <div key={req.id} className="card" style={{display:'grid',gridTemplateColumns:'1fr auto',gap:16,alignItems:'start'}}>
+          <div>
+            <div style={{display:'flex',gap:8,alignItems:'center',marginBottom:6}}>
+              <div style={{fontWeight:800,fontSize:17,fontFamily:"'Bricolage Grotesque',sans-serif"}}>{req.student_name}</div>
+              <StatusBadge s={req.status}/>
+              <span className="badge badge-blue">{req.session_type}</span>
+            </div>
+            <div style={{fontSize:13,color:'var(--text2)',lineHeight:1.7}}>
+              Grade: {req.grade||'Not set'} · Level: {req.level||'Not sure'} · Coach: {req.preferred_coach||'Assign me a coach'}<br/>
+              Parent: {req.parent_email}{req.parent_phone?` · ${req.parent_phone}`:''}<br/>
+              Preferred times: {req.preferred_times||'Not provided'}
+            </div>
+            <div style={{fontSize:11,color:'var(--text3)',marginTop:8}}>Submitted {new Date(req.created_at).toLocaleString()}</div>
+          </div>
+          <select value={req.status} onChange={e=>updateStatus(req.id,e.target.value)} style={{width:150}}>
+            <option value="new">New</option>
+            <option value="contacted">Contacted</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+      ))}
+    </div>}
+  </div>;
+};
 
 const AdminBilling=()=>(
   <div>
@@ -1792,7 +2136,4 @@ const App=()=>{
   if(view==='admin') return <AdminApp user={user} onLogout={handleLogout}/>;
 };
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
-</script>
-</body>
-</html>
+export default App;
